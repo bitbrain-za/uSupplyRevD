@@ -92,7 +92,9 @@ SUBDIRS :=  \
 C_SRCS +=  \
 ../src/ASF/sam0/drivers/port/port.c \
 ../src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.c \
+../src/Peripherals/DAC.c \
 ../src/Peripherals/eeprom.c \
+../src/Peripherals/INA219.c \
 ../src/ASF/sam0/drivers/sercom/sercom.c \
 ../src/ASF/common2/boards/user_board/init.c \
 ../src/ASF/common/utils/interrupt/interrupt_sam_nvic.c \
@@ -116,7 +118,9 @@ ASM_SRCS +=
 OBJS +=  \
 src/ASF/sam0/drivers/port/port.o \
 src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.o \
+src/Peripherals/DAC.o \
 src/Peripherals/eeprom.o \
+src/Peripherals/INA219.o \
 src/ASF/sam0/drivers/sercom/sercom.o \
 src/ASF/common2/boards/user_board/init.o \
 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o \
@@ -133,7 +137,9 @@ src/main.o
 OBJS_AS_ARGS +=  \
 src/ASF/sam0/drivers/port/port.o \
 src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.o \
+src/Peripherals/DAC.o \
 src/Peripherals/eeprom.o \
+src/Peripherals/INA219.o \
 src/ASF/sam0/drivers/sercom/sercom.o \
 src/ASF/common2/boards/user_board/init.o \
 src/ASF/common/utils/interrupt/interrupt_sam_nvic.o \
@@ -150,7 +156,9 @@ src/main.o
 C_DEPS +=  \
 src/ASF/sam0/drivers/port/port.d \
 src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.d \
+src/Peripherals/DAC.d \
 src/Peripherals/eeprom.d \
+src/Peripherals/INA219.d \
 src/ASF/sam0/drivers/sercom/sercom.d \
 src/ASF/common2/boards/user_board/init.d \
 src/ASF/common/utils/interrupt/interrupt_sam_nvic.d \
@@ -167,7 +175,9 @@ src/main.d
 C_DEPS_AS_ARGS +=  \
 src/ASF/sam0/drivers/port/port.d \
 src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.d \
+src/Peripherals/DAC.d \
 src/Peripherals/eeprom.d \
+src/Peripherals/INA219.d \
 src/ASF/sam0/drivers/sercom/sercom.d \
 src/ASF/common2/boards/user_board/init.d \
 src/ASF/common/utils/interrupt/interrupt_sam_nvic.d \
@@ -196,6 +206,10 @@ LINKER_SCRIPT_DEP+=  \
 
 
 # AVR32/GNU C Compiler
+
+
+
+
 
 
 

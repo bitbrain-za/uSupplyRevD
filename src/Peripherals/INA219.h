@@ -1,0 +1,81 @@
+/*
+ * INA219.h
+ *
+ * Created: 2016/10/11 8:42:14 PM
+ *  Author: philb
+ */ 
+
+
+#ifndef INA219_H_
+#define INA219_H_
+
+typedef enum
+{
+  INA219_CONFIG = 0x00,
+  INA219_SHUNT_VOLTAGE = 0x01,
+  INA219_BUS_VOLTAGE = 0x02,
+  INA219_POWER = 0x03,
+  INA219_CURRENT = 0x04,
+  INA219_CALIBRATION = 0x05,
+}INA219_REGISTER;
+
+typedef enum
+{
+  PGA_GAIN_DIV1 = 0x0,
+  PGA_GAIN_DIV2 = 0x1,
+  PGA_GAIN_DIV4 = 0x2,
+  PGA_GAIN_DIV8 = 0x3,
+}PGA_GAIN;
+
+typedef enum
+{
+  BUSV_16V = 0,
+  BUSV_32V = 1,
+}BUS_VOLTAGE;
+
+typedef enum
+{
+  ADC_BIT_9,
+  ADC_BIT_10,
+  ADC_BIT_11,
+  ADC_BIT_12,
+  ADC_SAMPLES_2,
+  ADC_SAMPLES_4,
+  ADC_SAMPLES_8,
+  ADC_SAMPLES_16,
+  ADC_SAMPLES_32,
+  ADC_SAMPLES_64,
+  ADC_SAMPLES_128,
+}ADC_SETTING;
+
+typedef enum
+{
+  POWER_DOWN = 0x0,
+  SHUNT_VOLTAGE_TRIGGERED = 0x01,
+  BUS_VOLTAGE_TRIGGERED = 0x02,
+  SHUNT_AND_BUS_TRIGGERED = 0x03,
+  ADC_OFF = 0x4,
+  SHUNT_VOLTAGE_CONTINUOUS = 0x5,
+  BUS_VOLTAGE_CONTINUOUS = 0x6,
+  SHUNT_AND_BUS_CONTINUOUS = 0x7,
+}OPERATING_MODE;
+
+typedef enum
+{
+  RANGE_40MA = PGA_GAIN_DIV1,
+  RANGE_80MA = PGA_GAIN_DIV2,
+  RANGE_160MA = PGA_GAIN_DIV4,
+  RANGE_320MA = PGA_GAIN_DIV8,
+}RANGE;
+
+  
+PGA_GAIN gain;
+BUS_VOLTAGE bus_voltage;
+ADC_SETTING adc;
+OPERATING_MODE mode;
+
+extern void INA219_init(BUS_VOLTAGE brng, ADC_SETTING adc_setting, OPERATING_MODE operating_mode);
+extern bool Reset(void);
+extern S16 Current(void);
+
+#endif /* INA219_H_ */

@@ -6,7 +6,11 @@ src\ASF\sam0\drivers\port\port.c
 
 src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master.c
 
+src\Peripherals\DAC.c
+
 src\Peripherals\eeprom.c
+
+src\Peripherals\INA219.c
 
 src\ASF\sam0\drivers\sercom\sercom.c
 
