@@ -12,6 +12,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "Core/adc.h"
+
 #include "Peripherals/DAC.h"
 #include "Peripherals/eeprom.h"
 #include "Peripherals/INA219.h"
