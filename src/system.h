@@ -15,6 +15,8 @@
 
 #include "Core/adc.h"
 
+#include "Display/display_driver.h"
+
 #include "Peripherals/DAC.h"
 #include "Peripherals/eeprom.h"
 #include "Peripherals/INA219.h"

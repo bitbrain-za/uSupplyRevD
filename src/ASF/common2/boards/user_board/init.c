@@ -15,6 +15,7 @@ void board_init(void);
 
 static void gpio_init(void);
 static void config_led(void);
+static void init_lcd_gpio(void);
 
 /***********************
 *  External Functions  *
@@ -24,6 +25,7 @@ void system_board_init(void)
 {
   gpio_init();
   config_led();
+  init_lcd_gpio();
 }
 
 /********************
@@ -64,45 +66,42 @@ static void init_lcd_gpio(void)
   port_get_config_defaults(&pin_conf);
   pin_conf.direction  = PORT_PIN_DIR_OUTPUT;
 
-  port_pin_set_config(LCD_CS_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_CS_PIN, false)
+  port_pin_set_config(LCD_CS_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_CS_PIN, false);
 
-  port_pin_set_config(LCD_WR_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_WR_PIN, false)
+  port_pin_set_config(LCD_WR_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_WR_PIN, false);
 
-  port_pin_set_config(LCD_RD_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_RD_PIN, false)
+  port_pin_set_config(LCD_RD_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_RD_PIN, false);
 
-  port_pin_set_config(LCD_RS_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_RS_PIN, false)
+  port_pin_set_config(LCD_RS_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_RS_PIN, false);
 
-  port_pin_set_config(LCD_RES_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_RES_PIN, false)
+  port_pin_set_config(LCD_RES_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_RES_PIN, false);
 
-  port_pin_set_config(LCD_DB0_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_DB0_PIN, false)
+  port_pin_set_config(LCD_DB0_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_DB0_PIN, false);
 
-  port_pin_set_config(LCD_DB1_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_DB1_PIN, false)
+  port_pin_set_config(LCD_DB1_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_DB1_PIN, false);
 
-  port_pin_set_config(LCD_DB2_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_DB2_PIN, false)
+  port_pin_set_config(LCD_DB2_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_DB2_PIN, false);
 
-  port_pin_set_config(LCD_DB3_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_DB3_PIN, false)
+  port_pin_set_config(LCD_DB3_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_DB3_PIN, false);
 
-  port_pin_set_config(LCD_DB4_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_DB4_PIN, false)
+  port_pin_set_config(LCD_DB4_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_DB4_PIN, false);
 
-  port_pin_set_config(LCD_DB5_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_DB5_PIN, false)
+  port_pin_set_config(LCD_DB5_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_DB5_PIN, false);
 
-  port_pin_set_config(LCD_DB6_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_DB6_PIN, false)
+  port_pin_set_config(LCD_DB6_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_DB6_PIN, false);
 
-  port_pin_set_config(LCD_DB7_PIN, &pin_conf)
-  port_pin_set_output_level(LCD_DB7_PIN, false)
-
-
-
+  port_pin_set_config(LCD_DB7_PIN, &pin_conf);
+  port_pin_set_output_level(LCD_DB7_PIN, false);
 }
