@@ -2,9 +2,15 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\ASF\sam0\drivers\adc\adc_sam_d_r\adc.c
+
+src\Core\adc.c
+
 src\ASF\sam0\drivers\port\port.c
 
 src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master.c
+
+src\Display\display_driver.c
 
 src\Peripherals\DAC.c
 

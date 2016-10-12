@@ -19,7 +19,10 @@ extern struct adc_module adc_instance;
   #undef extern
 #endif
 
-extern void adc_init(void);
+extern void adc_initialise(void);
+extern U16 ReadVoltage(void);
+extern U16 ReadCurrent(void);
+extern U16 ReadTemperature(void);
 
 
 

@@ -15,7 +15,6 @@ void board_init(void);
 
 static void gpio_init(void);
 static void config_led(void);
-void configure_i2c_master(struct i2c_master_module *const module);
 
 /***********************
 *  External Functions  *
@@ -25,7 +24,6 @@ void system_board_init(void)
 {
   gpio_init();
   config_led();
-  configure_i2c_master(&i2c_master_instance);
 }
 
 /********************
@@ -60,13 +58,51 @@ static void config_led(void)
   port_pin_set_output_level(LED2, LED2_INACTIVE);
 }
 
-void configure_i2c_master(struct i2c_master_module *const module)
+static void init_lcd_gpio(void)
 {
-  struct i2c_master_config config_i2c_master;
-  i2c_master_get_config_defaults(&config_i2c_master);
+  struct port_config pin_conf;
+  port_get_config_defaults(&pin_conf);
+  pin_conf.direction  = PORT_PIN_DIR_OUTPUT;
 
-  config_i2c_master.buffer_timeout = 10000;
+  port_pin_set_config(LCD_CS_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_CS_PIN, false)
 
-  i2c_master_init(module, I2C_MODULE, &config_i2c_master);
-  i2c_master_enable(module);
+  port_pin_set_config(LCD_WR_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_WR_PIN, false)
+
+  port_pin_set_config(LCD_RD_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_RD_PIN, false)
+
+  port_pin_set_config(LCD_RS_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_RS_PIN, false)
+
+  port_pin_set_config(LCD_RES_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_RES_PIN, false)
+
+  port_pin_set_config(LCD_DB0_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_DB0_PIN, false)
+
+  port_pin_set_config(LCD_DB1_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_DB1_PIN, false)
+
+  port_pin_set_config(LCD_DB2_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_DB2_PIN, false)
+
+  port_pin_set_config(LCD_DB3_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_DB3_PIN, false)
+
+  port_pin_set_config(LCD_DB4_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_DB4_PIN, false)
+
+  port_pin_set_config(LCD_DB5_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_DB5_PIN, false)
+
+  port_pin_set_config(LCD_DB6_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_DB6_PIN, false)
+
+  port_pin_set_config(LCD_DB7_PIN, &pin_conf)
+  port_pin_set_output_level(LCD_DB7_PIN, false)
+
+
+
 }

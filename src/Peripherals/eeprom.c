@@ -5,10 +5,10 @@
  *  Author: philb
  */ 
 
- #include <asf.h>
+#include "../system.h"
 
- static const U8 DeviceAddress = 0xA0;
- static const U16 MemorySize = 1024;
+static const U8 DeviceAddress = 0xA0;
+static const U16 MemorySize = 1024;
 
 EEPROM_RESULT EEPROM_Write(U16 address, U8 *data, U8 length)
 {

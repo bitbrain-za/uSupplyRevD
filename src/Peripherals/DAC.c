@@ -5,7 +5,7 @@
  *  Author: philb
  */ 
 
- #include <asf.h>
+ #include "../system.h"
 
  /*
  Variables

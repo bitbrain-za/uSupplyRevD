@@ -1,28 +1,78 @@
 /*
- * adc.c
- *
- * Created: 2016/10/11 10:02:08 PM
- *  Author: philb
- */ 
+* adc.c
+*
+* Created: 2016/10/11 10:02:08 PM
+*  Author: philb
+*/ 
 
- #include <asf.h>
+#define ADC_C_
 
- adc_negative_input negative_input;
- adc_positive_input adc_voltage_out = ADC_POSITIVE_INPUT_PIN19;
- adc_positive_input adc_temp_sense = ADC_POSITIVE_INPUT_PIN18;
- adc_positive_input adc_current_sense = ADC_POSITIVE_INPUT_PIN17;
+#include "../system.h"
 
- struct adc_config config_adc;
+/*
+Prototypes
+*/
+void adc_config_voltage(void);
+void adc_config_current(void);
+void adc_config_temperature(void);
 
- /*
- External Functions
- */
+/*
+External Functions
+*/
 
- void adc_init(void)
- {
+void adc_initialise(void)
+{
+  struct adc_config config_adc;
+
   adc_get_config_defaults(&config_adc);
-  config_adc.negative_input = negative_input;
-  config_adc.positive_input = adc_voltage_out;
+  config_adc.negative_input = ADC_NEGATIVE_INPUT_GND;
+  config_adc.positive_input = ADC_POSITIVE_INPUT_PIN19;
   adc_init(&adc_instance, ADC, &config_adc);
   adc_enable(&adc_instance);
- }
+}
+
+U16 ReadVoltage(void)
+{
+  U16 result;
+  adc_config_voltage();
+  while(adc_read(&adc_instance, &result) == STATUS_BUSY) {;}
+  return result;
+}
+
+U16 ReadCurrent(void)
+{
+  U16 result;
+  adc_config_current();
+  while(adc_read(&adc_instance, &result) == STATUS_BUSY) {;}
+  return result;
+}
+
+U16 ReadTemperature(void)
+{
+  U16 result;
+  adc_config_temperature();
+  while(adc_read(&adc_instance, &result) == STATUS_BUSY) {;}
+  return result;
+}
+
+/*
+Local Functions
+*/
+
+void adc_config_voltage(void)
+{
+  adc_set_positive_input(&adc_instance, ADC_POSITIVE_INPUT_PIN19);
+}
+
+
+void adc_config_current(void)
+{
+  adc_set_positive_input(&adc_instance, ADC_POSITIVE_INPUT_PIN17);
+}
+
+
+void adc_config_temperature(void)
+{
+  adc_set_positive_input(&adc_instance, ADC_POSITIVE_INPUT_PIN18);
+}
+
