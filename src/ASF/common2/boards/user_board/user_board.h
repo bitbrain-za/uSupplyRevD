@@ -30,6 +30,21 @@ GPIO
 #define EEWP_ENABLE()             port_pin_set_output_level(EEWP_PIN,true)
 #define EEWP_DISABLE()            port_pin_set_output_level(EEWP_PIN,false)
 
+#define LCD_CS_PIN                PIN_PB08
+#define LCD_WR_PIN                PIN_PA02
+#define LCD_RD_PIN                PIN_PA04
+#define LCD_RS_PIN                PIN_PB09
+#define LCD_RES_PIN               PIN_PA03
+
+#define LCD_DB0_PIN               PIN_PA01
+#define LCD_DB1_PIN               PIN_PA05
+#define LCD_DB2_PIN               PIN_PA00
+#define LCD_DB3_PIN               PIN_PA06
+#define LCD_DB4_PIN               PIN_PB03
+#define LCD_DB5_PIN               PIN_PA07
+#define LCD_DB6_PIN               PIN_PB02
+#define LCD_DB7_PIN               PIN_PA08
+
 /*
 LEDs
 */
