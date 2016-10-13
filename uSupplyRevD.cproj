@@ -557,6 +557,7 @@
     <Folder Include="src\config\" />
     <Folder Include="src\Core" />
     <Folder Include="src\Display" />
+    <Folder Include="src\Display\fonts" />
     <Folder Include="src\Peripherals" />
   </ItemGroup>
   <ItemGroup>
@@ -581,10 +582,28 @@
     <Compile Include="src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\Display\display.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Display\display.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\Display\display_driver.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Display\display_driver.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Display\fonts.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Display\fonts.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Display\fonts\sitka_med.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Display\fonts\small_font.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Peripherals\DAC.c">

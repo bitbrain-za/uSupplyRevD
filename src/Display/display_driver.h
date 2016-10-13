@@ -40,8 +40,18 @@ typedef enum
   DISP_NOP = 0xE3,
 }DISPLAY_COMMANDS;
 
+#define LCD_RDPinSet()        port_pin_set_output_level(LCD_RD_PIN, true)
+#define LCD_RDPinClear()      port_pin_set_output_level(LCD_RD_PIN, false)
+#define LCD_ChipSelect()      port_pin_set_output_level(LCD_CS_PIN, true)
+#define LCD_ChipDeselect()    port_pin_set_output_level(LCD_CS_PIN, false)
+#define LCD_DataMode()        port_pin_set_output_level(LCD_RS_PIN, true)
+#define LCD_CommandMode()     port_pin_set_output_level(LCD_RS_PIN, false)
+#define LCD_WRPinSet()        port_pin_set_output_level(LCD_WR_PIN, true)
+#define LCD_WRPinClear()      port_pin_set_output_level(LCD_WR_PIN, false)
 
-extern void disp_init();
+extern void disp_init(void);
+extern void disp_put_data(U8 data);
+extern void disp_trigger_write(void);
 extern bool disp_SetStartLine(U8 line);
 extern bool disp_SetPageAddress(U8 page_address);
 extern bool disp_SetColumnAddress(U8 column_address);

@@ -14,6 +14,7 @@ int main (void)
 	system_init();
  	SysTick_Config(system_gclk_gen_get_hz(GCLK_GENERATOR_0));
   configure_i2c_master(&i2c_master_instance);
+  display_init();
   adc_initialise();
 
   while(1)

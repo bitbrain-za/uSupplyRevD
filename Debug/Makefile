@@ -89,6 +89,7 @@ SUBDIRS :=  \
 ../src/config/ \
 ../src/Core \
 ../src/Display \
+../src/Display/fonts \
 ../src/Peripherals
 
 
@@ -98,7 +99,9 @@ C_SRCS +=  \
 ../src/Core/adc.c \
 ../src/ASF/sam0/drivers/port/port.c \
 ../src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.c \
+../src/Display/display.c \
 ../src/Display/display_driver.c \
+../src/Display/fonts.c \
 ../src/Peripherals/DAC.c \
 ../src/Peripherals/eeprom.c \
 ../src/Peripherals/INA219.c \
@@ -127,7 +130,9 @@ src/ASF/sam0/drivers/adc/adc_sam_d_r/adc.o \
 src/Core/adc.o \
 src/ASF/sam0/drivers/port/port.o \
 src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.o \
+src/Display/display.o \
 src/Display/display_driver.o \
+src/Display/fonts.o \
 src/Peripherals/DAC.o \
 src/Peripherals/eeprom.o \
 src/Peripherals/INA219.o \
@@ -149,7 +154,9 @@ src/ASF/sam0/drivers/adc/adc_sam_d_r/adc.o \
 src/Core/adc.o \
 src/ASF/sam0/drivers/port/port.o \
 src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.o \
+src/Display/display.o \
 src/Display/display_driver.o \
+src/Display/fonts.o \
 src/Peripherals/DAC.o \
 src/Peripherals/eeprom.o \
 src/Peripherals/INA219.o \
@@ -171,7 +178,9 @@ src/ASF/sam0/drivers/adc/adc_sam_d_r/adc.d \
 src/Core/adc.d \
 src/ASF/sam0/drivers/port/port.d \
 src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.d \
+src/Display/display.d \
 src/Display/display_driver.d \
+src/Display/fonts.d \
 src/Peripherals/DAC.d \
 src/Peripherals/eeprom.d \
 src/Peripherals/INA219.d \
@@ -193,7 +202,9 @@ src/ASF/sam0/drivers/adc/adc_sam_d_r/adc.d \
 src/Core/adc.d \
 src/ASF/sam0/drivers/port/port.d \
 src/ASF/sam0/drivers/sercom/i2c/i2c_sam0/i2c_master.d \
+src/Display/display.d \
 src/Display/display_driver.d \
+src/Display/fonts.d \
 src/Peripherals/DAC.d \
 src/Peripherals/eeprom.d \
 src/Peripherals/INA219.d \
@@ -225,6 +236,10 @@ LINKER_SCRIPT_DEP+=  \
 
 
 # AVR32/GNU C Compiler
+
+
+
+
 
 
 
