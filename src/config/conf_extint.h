@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief User board configuration template
+ * \brief SAM External Interrupt Driver Configuration Header
  *
  * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
  *
@@ -43,17 +43,23 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
+#ifndef CONF_EXTINT_H_INCLUDED
+#define CONF_EXTINT_H_INCLUDED
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+/** 
+ * Define which clock type is used to clock EIC peripheral:
+ *     - EXTINT_CLK_GCLK
+ *     - EXTINT_CLK_ULP32K
+ *
+ * EXTINT_CLK_ULP32K is available for SAM L21/C21.
+ */
+#define EXTINT_CLOCK_SELECTION   EXTINT_CLK_GCLK
+ 
+/**
+ * Define which GCLK source is used when selecting EXTINT_CLK_GCLK type.
+ */
+#if (EXTINT_CLOCK_SELECTION == EXTINT_CLK_GCLK)
+#  define EXTINT_CLOCK_SOURCE      GCLK_GENERATOR_0
+#endif
 
-//#define CONF_BOARD_USB_VBUS_DETECT
-
-#define CONF_USART_BASE           SERCOM2  
-#define CONF_USART_MUX_SETTING    USART_RX_1_TX_0_XCK_1 
-#define CONF_USART_PINMUX_PAD0    PINMUX_PA12C_SERCOM2_PAD0
-#define CONF_USART_PINMUX_PAD1    PINMUX_PA13C_SERCOM2_PAD1
-#define CONF_USART_PINMUX_PAD2    PINMUX_UNUSED
-#define CONF_USART_PINMUX_PAD3    PINMUX_UNUSED
-
-#endif // CONF_BOARD_H
+#endif

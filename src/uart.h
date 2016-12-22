@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief User board configuration template
+ * \brief UART functions
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2009-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,16 +44,26 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef _UART_H_
+#define _UART_H_
 
-//#define CONF_BOARD_USB_VBUS_DETECT
+/*! \brief Called by CDC interface
+ * Callback running when CDC device have received data
+ */
+void uart_rx_notify(uint8_t port);
 
-#define CONF_USART_BASE           SERCOM2  
-#define CONF_USART_MUX_SETTING    USART_RX_1_TX_0_XCK_1 
-#define CONF_USART_PINMUX_PAD0    PINMUX_PA12C_SERCOM2_PAD0
-#define CONF_USART_PINMUX_PAD1    PINMUX_PA13C_SERCOM2_PAD1
-#define CONF_USART_PINMUX_PAD2    PINMUX_UNUSED
-#define CONF_USART_PINMUX_PAD3    PINMUX_UNUSED
+/*! \brief Configures communication line
+ *
+ * \param cfg      line configuration
+ */
+void uart_config(uint8_t port, usb_cdc_line_coding_t * cfg);
 
-#endif // CONF_BOARD_H
+/*! \brief Opens communication line
+ */
+void uart_open(uint8_t port);
+
+/*! \brief Closes communication line
+ */
+void uart_close(uint8_t port);
+
+#endif // _UART_H_

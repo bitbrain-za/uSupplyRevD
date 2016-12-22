@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief User board configuration template
+ * \brief SAM Serial Peripheral Interface Driver
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,17 +43,30 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
+#ifndef SERCOM_INTERRUPT_H_INCLUDED
+#define SERCOM_INTERRUPT_H_INCLUDED
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#include "sercom.h"
+#include <system_interrupt.h>
 
-//#define CONF_BOARD_USB_VBUS_DETECT
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define CONF_USART_BASE           SERCOM2  
-#define CONF_USART_MUX_SETTING    USART_RX_1_TX_0_XCK_1 
-#define CONF_USART_PINMUX_PAD0    PINMUX_PA12C_SERCOM2_PAD0
-#define CONF_USART_PINMUX_PAD1    PINMUX_PA13C_SERCOM2_PAD1
-#define CONF_USART_PINMUX_PAD2    PINMUX_UNUSED
-#define CONF_USART_PINMUX_PAD3    PINMUX_UNUSED
+/* Look-up table for device instances */
+extern void *_sercom_instances[SERCOM_INST_NUM];
 
-#endif // CONF_BOARD_H
+typedef void (*sercom_handler_t)(uint8_t instance);
+
+enum system_interrupt_vector _sercom_get_interrupt_vector(
+		Sercom *const sercom_instance);
+
+void _sercom_set_handler(
+		const uint8_t instance,
+		const sercom_handler_t interrupt_handler);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* SERCOM_INTERRUPT_H_INCLUDED */

@@ -16,6 +16,7 @@ void board_init(void);
 static void gpio_init(void);
 static void config_led(void);
 static void init_lcd_gpio(void);
+static void config_encoders_and_switches(void);
 
 /***********************
 *  External Functions  *
@@ -26,6 +27,7 @@ void system_board_init(void)
   gpio_init();
   config_led();
   init_lcd_gpio();
+  config_encoders_and_switches();
 }
 
 /********************
@@ -58,6 +60,25 @@ static void config_led(void)
 
   port_pin_set_config(LED2, &pin_conf);
   port_pin_set_output_level(LED2, LED2_INACTIVE);
+}
+
+static void config_encoders_and_switches(void)
+{
+  struct port_config pin_conf;
+  port_get_config_defaults(&pin_conf);
+  pin_conf.direction  = PORT_PIN_DIR_INPUT;
+  pin_conf.input_pull = PORT_PIN_PULL_UP;
+
+  port_pin_set_config(ENC1A, &pin_conf);
+  port_pin_set_config(ENC1B, &pin_conf);
+  port_pin_set_config(ENC2A, &pin_conf);
+  port_pin_set_config(ENC2A, &pin_conf);
+
+  port_pin_set_config(SW0_PIN, &pin_conf);
+  port_pin_set_config(SW1_PIN, &pin_conf);
+  port_pin_set_config(SW2_PIN, &pin_conf);
+  port_pin_set_config(SW3_PIN, &pin_conf);
+  port_pin_set_config(SW4_PIN, &pin_conf);
 }
 
 static void init_lcd_gpio(void)

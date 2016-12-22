@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief User board configuration template
+ * \brief SAM External Interrupt Driver
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (C) 2012-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -43,17 +43,66 @@
 /*
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
+#ifndef EXTINT_CALLBACK_H_INCLUDED
+#define EXTINT_CALLBACK_H_INCLUDED
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#include <compiler.h>
 
-//#define CONF_BOARD_USB_VBUS_DETECT
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define CONF_USART_BASE           SERCOM2  
-#define CONF_USART_MUX_SETTING    USART_RX_1_TX_0_XCK_1 
-#define CONF_USART_PINMUX_PAD0    PINMUX_PA12C_SERCOM2_PAD0
-#define CONF_USART_PINMUX_PAD1    PINMUX_PA13C_SERCOM2_PAD1
-#define CONF_USART_PINMUX_PAD2    PINMUX_UNUSED
-#define CONF_USART_PINMUX_PAD3    PINMUX_UNUSED
+/**
+ * \addtogroup asfdoc_sam0_extint_group
+ *
+ * @{
+ */
 
-#endif // CONF_BOARD_H
+/** \name Callback Configuration and Initialization
+ * @{
+ */
+
+/** Enum for the possible callback types for the EXTINT module. */
+enum extint_callback_type
+{
+	/** Callback type for when an external interrupt detects the configured
+	 *  channel criteria (i.e. edge or level detection)
+	 */
+	EXTINT_CALLBACK_TYPE_DETECT,
+};
+
+enum status_code extint_register_callback(
+	const extint_callback_t callback,
+	const uint8_t channel,
+	const enum extint_callback_type type);
+
+enum status_code extint_unregister_callback(
+	const extint_callback_t callback,
+	const uint8_t channel,
+	const enum extint_callback_type type);
+
+uint8_t extint_get_current_channel(void);
+
+/** @} */
+
+/** \name Callback Enabling and Disabling (Channel)
+ * @{
+ */
+
+enum status_code extint_chan_enable_callback(
+	const uint8_t channel,
+	const enum extint_callback_type type);
+
+enum status_code extint_chan_disable_callback(
+	const uint8_t channel,
+	const enum extint_callback_type type);
+
+/** @} */
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

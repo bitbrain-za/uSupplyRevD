@@ -1,9 +1,9 @@
 /**
  * \file
  *
- * \brief User board configuration template
+ * \brief SAM USB Dual Role driver header file.
  *
- * Copyright (C) 2013-2015 Atmel Corporation. All rights reserved.
+ * Copyright (c) 2014-2015 Atmel Corporation. All rights reserved.
  *
  * \asf_license_start
  *
@@ -44,16 +44,68 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef CONF_BOARD_H
-#define CONF_BOARD_H
+#ifndef _USB_DUAL_H_
+#define _USB_DUAL_H_
 
-//#define CONF_BOARD_USB_VBUS_DETECT
+#include "compiler.h"
+#include "preprocessor.h"
 
-#define CONF_USART_BASE           SERCOM2  
-#define CONF_USART_MUX_SETTING    USART_RX_1_TX_0_XCK_1 
-#define CONF_USART_PINMUX_PAD0    PINMUX_PA12C_SERCOM2_PAD0
-#define CONF_USART_PINMUX_PAD1    PINMUX_PA13C_SERCOM2_PAD1
-#define CONF_USART_PINMUX_PAD2    PINMUX_UNUSED
-#define CONF_USART_PINMUX_PAD3    PINMUX_UNUSED
+/* Get USB pads pins configuration in board configuration */
+#include "conf_board.h"
+#include "board.h"
+#include "extint.h"
+#include "port.h"
 
-#endif // CONF_BOARD_H
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/**
+ * \ingroup usb_group
+ * \defgroup usb_dual_group USB dual role driver
+ * USB low-level driver for dual role features
+ *
+ * @{
+ */
+
+bool usb_dual_enable(void);
+void usb_dual_disable(void);
+
+/**
+ * @name USB ID pin management
+ *
+ * The ID pin come from the USB connector (A and B receptable) and
+ * allows to select the USB mode between host or device.
+ * The ID pin can be managed through EIC pin.
+ * This feature is optional, and it is enabled if USB_ID_PIN
+ * is defined in board.h and CONF_BOARD_USB_ID_DETECT defined in
+ * conf_board.h.
+*
+* @{
+*/
+#define USB_ID_DETECT        (defined(CONF_BOARD_USB_ID_DETECT))
+#define USB_ID_EIC           (defined(USB_ID_PIN) && USB_ID_DETECT)
+/** @} */
+
+/**
+ * @name USB Vbus management
+ *
+ * The VBus line can be monitored through a EIC pin and
+ * a basic resistor voltage divider.
+ * This feature is optional, and it is enabled if USB_VBUS_PIN
+ * is defined in board.h and CONF_BOARD_USB_VBUS_DETECT defined in
+ * conf_board.h.
+ *
+ * @{
+ */
+#define USB_VBUS_DETECT      (defined(CONF_BOARD_USB_VBUS_DETECT))
+#define USB_VBUS_EIC         (defined(USB_VBUS_PIN) && USB_VBUS_DETECT)
+/** @} */
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // _USB_DUAL_H_

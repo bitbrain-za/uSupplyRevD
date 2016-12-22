@@ -124,6 +124,19 @@ Switches
 #define SW4_EIC_PINMUX            PINMUX_PA20A_EIC_EXTINT4
 #define SW4_EIC_LINE              4
 
+
+/*
+Rotary Encoders
+*/
+
+#define ENCODER_1_NAME            "Voltage Encoder"
+#define ENC1A                     PIN_PA19
+#define ENC1B                     PIN_PA18
+
+#define ENCODER_2_NAME            "Current Encoder"
+#define ENC2A                     PIN_PA22
+#define ENC2B                     PIN_PA21
+
 /*
 ADC
 */
