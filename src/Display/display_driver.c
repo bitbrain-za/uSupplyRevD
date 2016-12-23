@@ -17,6 +17,7 @@ Prototypes
 void disp_SetPowerMode(bool VoltageFollower, bool VoltageRegulator, bool VoltageConverter);
 void disp_SendData(U8 val);
 void disp_SendCommand(U8 val);
+void disp_reset(void);
 
 /* Pins */
 
@@ -35,7 +36,7 @@ void disp_init(void)
   LCD_RDPinSet();
   LCD_ChipSelect();
 
-  Reset();
+  disp_reset();
   
   _delay_ms(500);
 
@@ -59,24 +60,33 @@ void disp_init(void)
   LCD_ChipDeselect();
 }
 
+void disp_reset(void)
+{
+  port_pin_set_output_level(LCD_RES_PIN, false);
+  delay_ms(100); 
+  port_pin_set_output_level(LCD_RES_PIN, true);
+}
+
 void disp_put_data(U8 data)
 {
-  port_pin_set_output_level(LCD_DB0_PIN, ( (data & (0x01 << 7)) == (0x01 << 7) ));
-  port_pin_set_output_level(LCD_DB1_PIN, ( (data & (0x01 << 6)) == (0x01 << 6) ));
-  port_pin_set_output_level(LCD_DB2_PIN, ( (data & (0x01 << 5)) == (0x01 << 5) ));
-  port_pin_set_output_level(LCD_DB3_PIN, ( (data & (0x01 << 4)) == (0x01 << 4) ));
-  port_pin_set_output_level(LCD_DB4_PIN, ( (data & (0x01 << 3)) == (0x01 << 3) ));
-  port_pin_set_output_level(LCD_DB5_PIN, ( (data & (0x01 << 2)) == (0x01 << 2) ));
-  port_pin_set_output_level(LCD_DB6_PIN, ( (data & (0x01 << 1)) == (0x01 << 1) ));
-  port_pin_set_output_level(LCD_DB7_PIN, ( (data & (0x01 << 0)) == (0x01 << 0) ));
+  port_pin_set_output_level(LCD_DB7_PIN, ( (data & (0x01 << 7)) == (0x01 << 7) ));
+  port_pin_set_output_level(LCD_DB6_PIN, ( (data & (0x01 << 6)) == (0x01 << 6) ));
+  port_pin_set_output_level(LCD_DB5_PIN, ( (data & (0x01 << 5)) == (0x01 << 5) ));
+  port_pin_set_output_level(LCD_DB4_PIN, ( (data & (0x01 << 4)) == (0x01 << 4) ));
+  port_pin_set_output_level(LCD_DB3_PIN, ( (data & (0x01 << 3)) == (0x01 << 3) ));
+  port_pin_set_output_level(LCD_DB2_PIN, ( (data & (0x01 << 2)) == (0x01 << 2) ));
+  port_pin_set_output_level(LCD_DB1_PIN, ( (data & (0x01 << 1)) == (0x01 << 1) ));
+  port_pin_set_output_level(LCD_DB0_PIN, ( (data & (0x01 << 0)) == (0x01 << 0) ));
 }
 
 
 void disp_trigger_write(void)
 {
+  _delay_us(20);
   LCD_WRPinClear();
-  _delay_us(2);
+  _delay_us(100);
   LCD_WRPinSet();
+  _delay_us(20);
 }
 
 bool disp_SetStartLine(U8 line)

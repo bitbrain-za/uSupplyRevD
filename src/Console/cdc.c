@@ -7,7 +7,6 @@
 #include "../system.h"
 #include "cdc.h"
 
-#include "conf_board.h"
 #include "conf_usb.h"
 
 static volatile bool main_b_cdc_enable = false;

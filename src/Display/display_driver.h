@@ -42,8 +42,8 @@ typedef enum
 
 #define LCD_RDPinSet()        port_pin_set_output_level(LCD_RD_PIN, true)
 #define LCD_RDPinClear()      port_pin_set_output_level(LCD_RD_PIN, false)
-#define LCD_ChipSelect()      port_pin_set_output_level(LCD_CS_PIN, true)
-#define LCD_ChipDeselect()    port_pin_set_output_level(LCD_CS_PIN, false)
+#define LCD_ChipSelect()      port_pin_set_output_level(LCD_CS_PIN, false)
+#define LCD_ChipDeselect()    port_pin_set_output_level(LCD_CS_PIN, true)
 #define LCD_DataMode()        port_pin_set_output_level(LCD_RS_PIN, true)
 #define LCD_CommandMode()     port_pin_set_output_level(LCD_RS_PIN, false)
 #define LCD_WRPinSet()        port_pin_set_output_level(LCD_WR_PIN, true)

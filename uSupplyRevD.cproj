@@ -813,9 +813,6 @@
     <Compile Include="src\Core\delay.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="src\main.h">
-      <SubType>compile</SubType>
-    </Compile>
     <None Include="atmel_devices_cdc.cat">
       <SubType>compile</SubType>
     </None>
@@ -1375,9 +1372,6 @@
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\sam0\drivers\system\clock\clock_samd21_r21_da\clock_config_check.h">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="src\config\conf_board.h">
       <SubType>compile</SubType>
     </None>
     <None Include="src\ASF\sam0\utils\cmsis\samd21\include\samd21e16bu.h">

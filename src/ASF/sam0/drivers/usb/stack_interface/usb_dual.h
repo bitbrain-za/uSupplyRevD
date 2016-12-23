@@ -51,7 +51,6 @@
 #include "preprocessor.h"
 
 /* Get USB pads pins configuration in board configuration */
-#include "conf_board.h"
 #include "board.h"
 #include "extint.h"
 #include "port.h"

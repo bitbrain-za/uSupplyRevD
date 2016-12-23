@@ -27,6 +27,7 @@ U8 pos_y;
 void display_init()
 {
   disp_init();
+
   ClearScreen(false);
   SmallFont.charmap = small_font;
   SmallFont.height = 1;

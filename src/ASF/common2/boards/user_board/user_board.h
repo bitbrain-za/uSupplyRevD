@@ -1,8 +1,6 @@
 #ifndef USER_BOARD_H
 #define USER_BOARD_H
 
-#include <conf_board.h>
-
 void system_board_init(void);
 
 #define BOARD_NAME                "USUPPLY_REVD"
@@ -35,6 +33,10 @@ GPIO
 
 #define EEWP_ENABLE()             port_pin_set_output_level(EEWP_PIN,true)
 #define EEWP_DISABLE()            port_pin_set_output_level(EEWP_PIN,false)
+
+/*
+LCD
+*/
 
 #define LCD_CS_PIN                PIN_PB08
 #define LCD_WR_PIN                PIN_PA02

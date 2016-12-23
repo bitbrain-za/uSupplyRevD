@@ -17,10 +17,13 @@ int main (void)
   sleepmgr_init();
   delay_init();
 
+ 
+  display_init();
+
   console_fsm(true);
 
 //  configure_i2c_master(&i2c_master_instance);
-  display_init();
+  
 //  adc_initialise();
 
   udc_start();
