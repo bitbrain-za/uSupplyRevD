@@ -132,9 +132,9 @@
 //! Interface callback definition
 #define  UDI_CDC_ENABLE_EXT(port)         main_cdc_enable(port)
 #define  UDI_CDC_DISABLE_EXT(port)        main_cdc_disable(port)
-#define  UDI_CDC_RX_NOTIFY(port)          uart_rx_notify(port)
+#define  UDI_CDC_RX_NOTIFY(port)          cdc_rx_notify(port)
 #define  UDI_CDC_TX_EMPTY_NOTIFY(port)
-#define  UDI_CDC_SET_CODING_EXT(port,cfg) uart_config(port,cfg)
+#define  UDI_CDC_SET_CODING_EXT(port,cfg) 
 #define  UDI_CDC_SET_DTR_EXT(port,set)    main_cdc_set_dtr(port,set)
 #define  UDI_CDC_SET_RTS_EXT(port,set)
 
@@ -159,7 +159,6 @@
 
 //! The includes of classes and other headers must be done at the end of this file to avoid compile error
 #include "udi_cdc_conf.h"
-#include "uart.h"
-#include "main.h"
+#include "Console/cdc.h"
 
 #endif // _CONF_USB_H_

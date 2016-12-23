@@ -4,7 +4,9 @@
 
 src\ASF\common\services\sleepmgr\samd\sleepmgr.c
 
-src\uart_samd.c
+src\Console\cdc.c
+
+src\Console\console.c
 
 src\ASF\common\services\usb\class\cdc\device\udi_cdc.c
 

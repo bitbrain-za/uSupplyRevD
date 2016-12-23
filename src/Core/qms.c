@@ -45,6 +45,7 @@ bool b_queue_send(Queue *queue, void *data)
     return false;
 
   memcpy(next_free(queue), data, queue->item_size);
+  queue->items++;
   return true;
 }
 

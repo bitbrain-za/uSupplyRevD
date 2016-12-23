@@ -91,7 +91,8 @@ extern UDC_DESC_STORAGE udi_api_t udi_api_cdc_data;
  * Interface descriptor with associated functional and endpoint
  * descriptors for the CDC Communication Class interface.
  */
-typedef struct {
+typedef struct 
+{
 	//! Standard interface descriptor
 	usb_iface_desc_t iface;
 	//! CDC Header functional descriptor
@@ -104,7 +105,8 @@ typedef struct {
 	usb_cdc_call_mgmt_desc_t call_mgmt;
 	//! Notification endpoint descriptor
 	usb_ep_desc_t ep_notify;
-} udi_cdc_comm_desc_t;
+} 
+udi_cdc_comm_desc_t;
 
 
 /**
@@ -113,13 +115,15 @@ typedef struct {
  * Interface descriptor with associated endpoint descriptors for the
  * CDC Data Class interface.
  */
-typedef struct {
+typedef struct 
+{
 	//! Standard interface descriptor
 	usb_iface_desc_t iface;
 	//! Data IN/OUT endpoint descriptors
 	usb_ep_desc_t ep_in;
 	usb_ep_desc_t ep_out;
-} udi_cdc_data_desc_t;
+} 
+udi_cdc_data_desc_t;
 
 
 //! CDC communication endpoints size for all speeds

@@ -1,7 +1,19 @@
+/*
+ * cdc.h
+ *
+ * Created: 2016/12/23 12:24:18 PM
+ *  Author: philb
+ */ 
+
+
+#ifndef CDC_H_
+#define CDC_H_
+
+
 /**
  * \file
  *
- * \brief UART functions
+ * \brief Main functions
  *
  * Copyright (c) 2009-2015 Atmel Corporation. All rights reserved.
  *
@@ -44,26 +56,57 @@
  * Support and FAQ: visit <a href="http://www.atmel.com/design-support/">Atmel Support</a>
  */
 
-#ifndef _UART_H_
-#define _UART_H_
+#include "usb_protocol_cdc.h"
 
-/*! \brief Called by CDC interface
- * Callback running when CDC device have received data
- */
-void uart_rx_notify(uint8_t port);
 
-/*! \brief Configures communication line
+
+/*! \brief Opens the communication port
+ * This is called by CDC interface when USB Host enable it.
  *
- * \param cfg      line configuration
+ * \retval true if cdc startup is successfully done
  */
-void uart_config(uint8_t port, usb_cdc_line_coding_t * cfg);
+bool main_cdc_enable(uint8_t port);
 
-/*! \brief Opens communication line
+/*! \brief Closes the communication port
+ * This is called by CDC interface when USB Host disable it.
  */
-void uart_open(uint8_t port);
+void main_cdc_disable(uint8_t port);
 
-/*! \brief Closes communication line
+/*! \brief Manages the leds behaviors
+ * Called when a start of frame is received on USB line each 1ms.
  */
-void uart_close(uint8_t port);
+void main_sof_action(void);
 
-#endif // _UART_H_
+/*! \brief Enters the application in low power mode
+ * Callback called when USB host sets USB line in suspend state
+ */
+void main_suspend_action(void);
+
+/*! \brief Turn on a led to notify active mode
+ * Called when the USB line is resumed from the suspend state
+ */
+void main_resume_action(void);
+
+/*! \brief Save new DTR state to change led behavior.
+ * The DTR notify that the terminal have open or close the communication port.
+ */
+void main_cdc_set_dtr(uint8_t port, bool b_enable);
+
+#ifdef USB_DEVICE_LPM_SUPPORT
+/*! \brief Enters the application in low power mode
+ * Callback called when USB host sets LPM suspend state
+ */
+void main_suspend_lpm_action(void);
+
+/*! \brief Called by UDC when USB Host request to enable LPM remote wakeup
+ */
+void main_remotewakeup_lpm_enable(void);
+
+/*! \brief Called by UDC when USB Host request to disable LPM remote wakeup
+ */
+void main_remotewakeup_lpm_disable(void);
+#endif
+
+void cdc_rx_notify(uint8_t port);
+
+#endif /* CDC_H_ */

@@ -710,19 +710,26 @@
     <Folder Include="src\Core" />
     <Folder Include="src\Display" />
     <Folder Include="src\Display\fonts" />
+    <Folder Include="src\Console" />
     <Folder Include="src\Peripherals" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="src\ASF\common\services\sleepmgr\samd\sleepmgr.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\Console\cdc.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Console\cdc.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Console\console.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Console\console.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\main.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\uart.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\uart_samd.c">
       <SubType>compile</SubType>
     </Compile>
     <None Include="atmel_devices_cdc.cat">
