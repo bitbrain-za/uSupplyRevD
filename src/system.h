@@ -23,6 +23,7 @@
 #include "Core/qms.h"
 #include "Core/hmi.h"
 
+#include "Console/console.h"
 
 #include "Display/display.h"
 
