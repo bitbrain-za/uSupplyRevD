@@ -10,8 +10,8 @@
 #define DISPLAY_H_
 
 
-#define COLUMNS   128
-#define PAGES     8
+#define LCD_COLUMNS   128
+#define LCD_PAGES     8
 
 typedef enum
 {
@@ -33,7 +33,7 @@ extern void ClearScreen(bool invert);
 extern void ClearLine(U8 line, bool invert);
 extern void GoToXY(U8 x, U8 y);
 
-extern void PutChar(FONT_SIZE size, unsigned char c, bool invert);
-extern void PutStr(FONT_SIZE size, char *str, bool invert, JUSTIFICATION justification);
+extern void PutChar(unsigned char c, bool invert);
+extern void PutStr(char *str, bool invert, JUSTIFICATION justification);
 
 #endif /* DISPLAY_H_ */

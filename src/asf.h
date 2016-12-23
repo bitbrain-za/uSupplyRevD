@@ -52,8 +52,9 @@
  * running the ASF driver selector tool. Any changes will be discarded.
  */
 
-// From module: ADC - Analog-to-Digital Converter (Polled APIs)
+// From module: ADC - Analog-to-Digital Converter (Callback APIs)
 #include <adc.h>
+#include <adc_callback.h>
 
 // From module: Common SAM0 compiler driver
 #include <compiler.h>
@@ -85,12 +86,10 @@
 #include <sercom.h>
 #include <sercom_interrupt.h>
 
-// From module: SERCOM I2C - Master Mode I2C (Polled APIs)
+// From module: SERCOM I2C - Master Mode I2C (Callback APIs)
 #include <i2c_common.h>
 #include <i2c_master.h>
-
-// From module: SERCOM Polled API
-#include <sercom.h>
+#include <i2c_master_interrupt.h>
 
 // From module: SERCOM USART - Serial Communications (Callback APIs)
 #include <usart.h>
@@ -118,6 +117,10 @@
 // From module: Sleep manager - SAMD implementation
 #include <samd/sleepmgr.h>
 #include <sleepmgr.h>
+
+// From module: TC - Timer Counter (Callback APIs)
+#include <tc.h>
+#include <tc_interrupt.h>
 
 // From module: USB - Universal Serial Bus
 #include <usb.h>

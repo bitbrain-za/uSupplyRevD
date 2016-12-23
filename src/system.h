@@ -25,6 +25,7 @@
 
 #include "Console/console.h"
 
+#include "Display/fonts.h"
 #include "Display/display.h"
 
 #include "Peripherals/DAC.h"

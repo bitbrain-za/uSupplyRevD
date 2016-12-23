@@ -1,111 +1,119 @@
-/*
- * display.c
- *
- * Created: 2016/10/13 10:27:13 AM
- *  Author: Philip
- */ 
-
+/* 
+* LM6029ACW.cpp
+*
+* Created: 2016/07/21 1:01:27 PM
+* Author: Philip
+*/
 #include "../system.h"
-#include "display_driver.h"
-#include "fonts.h"
 #include "fonts/small_font.h"
 #include "fonts/sitka_med.h"
-
-Font small;
-Font medium;
-Font large;
+#include "display_driver.h"
 
 /*
-Variables
+Because of RAM limitations, we're going to hard-code the separators:
+  1 - page 3, width 4px, bits 2-5
+  2 - page 6, width 1px, bits 7
 */
 
-U8 ram_buffer[128][8];
+
+Font SmallFont;
+Font SitkaMed;
+
+Font *_font;
+
 U8 pos_x;
 U8 pos_y;
 
-/*
-Prototypes
-*/
-
-void paint_line(U8 line);
-void paint_display(void);
-U8 strwidth(FONT_SIZE size, char *str);
-
-/*
-External Functions
-*/
-
-void display_init(void)
+void display_init()
 {
   disp_init();
-  memset(ram_buffer, 0, 128*8);
+  ClearScreen(false);
+  SmallFont.charmap = small_font;
+  SmallFont.height = 1;
 
-  small.height = small_font_height;
-  small.charmap = small_font;
+  SitkaMed.charmap = sitka_med_font;
+  SitkaMed.height = 3;
 
-  medium.height = sitka_med_height;
-  medium.charmap = sitka_med_font;
+  _font = &SitkaMed;
+
+  pos_x = 0;
+  pos_y = 0;
 }
 
-void ClearScreen(bool invert)
+void ClearScreen(bool Invert)
 {
-  U8 temp = invert ? 0xFF : 0x00;
-  memset(ram_buffer, temp, COLUMNS * PAGES);
+  disp_Clear(Invert);
 }
 
 void ClearLine(U8 line, bool invert)
 {
-  U8 i;
-  U8 temp = invert ? 0xFF : 0x00;
-  for(i = 0 ; i < COLUMNS ; i++)
-  {
-    ram_buffer[i][line] = temp;
-  }
+  disp_ClearLine(line, invert);
 }
 
-void GoToXY(U8 x, U8 y)
+void GotoXY(unsigned char x, unsigned char y)
 {
-  if(x < COLUMNS - 1)
+  if(x < LCD_COLUMNS - 1)
     pos_x = x;
   else
     pos_x = 0;
   
-  if(y < PAGES)
+  if(y < LCD_PAGES)
     pos_y = y;
   else
     pos_y = 0;
 }
 
-/*
-Strings
-*/
-
-void PutChar(FONT_SIZE size, unsigned char c, bool invert)
+void PutStr(char *str, bool invert, JUSTIFICATION justification)
 {
-  Font *_font = &small;
+  unsigned int i=0;
 
-  switch(size)
+  U8 string_length = string_width(_font, str);
+  
+  switch(justification)
   {
-    case FONT_SMALL:
-      _font = &small;
-      break;
+    case JUST_LEFT:
+      pos_x = 0;
+    break;
 
-    case FONT_MEDIUM:
-      _font = &medium;
-      break;
+    case JUST_RIGHT:
+      pos_x = LCD_COLUMNS - string_length;
+    break;
 
-    case FONT_LARGE:
-      _font = &large;
-      break;
+    case JUST_CENTER:
+      pos_x = (LCD_COLUMNS - string_length) / 2;
+    break;
+
+    case JUST_NONE:
+
+    break;
   }
-  U8 *character = get_char(_font, c);
-  U8 length = char_width(_font, c);
+
+  do
+  {
+    PutChar(str[i], invert);
+    i++;
+  }while(str[i]!='\0');
+}
+
+
+void PutChar(unsigned char c, bool invert)
+{
+  const U8* character = get_char(_font, c);
+  U8 length = character++;
   int i = 0;
   int j = 0;
   U8 data = 0;
   
-  if((pos_x + length) >= COLUMNS)
-    return;
+  if((pos_x + length) >= LCD_COLUMNS)
+  {
+    pos_x = 0;
+    if(pos_y == (LCD_PAGES - 1))
+      pos_y = 0;
+    else
+      pos_y++;
+  }
+  else
+    pos_x++;
 
   for(j = 0 ; j < _font->height ; j ++)
   {
@@ -116,9 +124,15 @@ void PutChar(FONT_SIZE size, unsigned char c, bool invert)
     LCD_ChipSelect();
     LCD_DataMode();
 
-    for(i = 0 ; i < length ; i++)
+    for(i = 0 ; i < length ; i++) 
     {
-      data = *character++;
+      data = (character++);
+
+      /* Low RAM fix */
+      if((pos_y + j) == 6)
+      {
+        data |= 0x80;
+      }
 
       if(invert)
         data = ~data;
@@ -130,90 +144,30 @@ void PutChar(FONT_SIZE size, unsigned char c, bool invert)
   }
   pos_x += length;
 }
-
-void PutStr(FONT_SIZE size, char *str, bool invert, JUSTIFICATION justification)
+ 
+void WriteCharCol(U8 v, U8 x, U8 page, U8 colour)
 {
-  unsigned int i=0;
+  if(colour == 1)
+    v = ~v;
 
-  U8 string_length = strwidth(size, str);
-  
-  switch(justification)
-  {
-    case JUST_LEFT:
-    pos_x = 0;
-    break;
-
-    case JUST_RIGHT:
-    pos_x = COLUMNS - string_length;
-    break;
-
-    case JUST_CENTER:
-    pos_x = (COLUMNS - string_length) / 2;
-    break;
-
-    case JUST_NONE:
-
-    break;
-  }
-
-  do
-  {
-    PutChar(size, str[i], invert);
-    if(size == FONT_SMALL)
-      pos_x++;
-
-    i++;
-  }while(str[i]!='\0');
-}
-
-
-/*
-Local Functions
-*/
-
-void paint_line(U8 line)
-{
-  U8 i;
-
-  disp_SetColumnAddress(0);
-  disp_SetPageAddress(line);
-
-  LCD_ChipSelect();
   LCD_DataMode();
-
-  for(i = 0; i < COLUMNS; i++)
-  {
-    disp_put_data(ram_buffer[i][line]);
-    disp_trigger_write();
-  }
-
-  LCD_ChipDeselect();
+  disp_put_data(v);
+  disp_trigger_write();
 }
 
-void paint_display(void)
-{
-  U8 i;
-
-  for(i = 0; i < PAGES; i++)
-  {
-    paint_line(i);
-  }
-}
-
-U8 strwidth(FONT_SIZE size, char *str)
-{
+ void SetFont(FONT_SIZE size)
+ {
   switch(size)
   {
     case FONT_SMALL:
-      return string_width(&small, str);
-
+    _font = &SmallFont;
+    break;
+    
     case FONT_MEDIUM:
-      return string_width(&medium, str);
+    _font = &SitkaMed;
+    break;
 
     case FONT_LARGE:
-      return string_width(&large, str);
-
-    default:
-      return 0;
+    break;
   }
-}
+ }

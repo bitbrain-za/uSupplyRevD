@@ -22,7 +22,7 @@ void disp_SendCommand(U8 val);
 
 
 
-#define _delay_us(x)
+#define _delay_us(x) 
 #define _delay_ms(x)
 
 
@@ -75,7 +75,7 @@ void disp_put_data(U8 data)
 void disp_trigger_write(void)
 {
   LCD_WRPinClear();
-  _delay_us(1);
+  _delay_us(2);
   LCD_WRPinSet();
 }
 
@@ -158,7 +158,7 @@ void disp_Clear(bool Invert)
 {
   unsigned char i;
   
-  for(i=0 ; i < PAGES ; i++)
+  for(i=0 ; i < LCD_PAGES ; i++)
   {
     disp_ClearLine(i, Invert);
   }
@@ -180,7 +180,7 @@ void disp_ClearLine(U8 line, bool Invert)
   LCD_ChipSelect();
   LCD_DataMode();
 
-  for(j = 0 ; (j < COLUMNS) ; j++)
+  for(j = 0 ; (j < LCD_COLUMNS) ; j++)
   {
     disp_put_data(data);
     disp_trigger_write();

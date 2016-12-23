@@ -4,6 +4,18 @@
 
 src\ASF\common\services\sleepmgr\samd\sleepmgr.c
 
+src\ASF\sam0\drivers\adc\adc_sam_d_r\adc.c
+
+src\ASF\sam0\drivers\adc\adc_sam_d_r\adc_callback.c
+
+src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master.c
+
+src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master_interrupt.c
+
+src\ASF\sam0\drivers\tc\tc_interrupt.c
+
+src\ASF\sam0\drivers\tc\tc_sam_d_r\tc.c
+
 src\Console\cdc.c
 
 src\Console\console.c
@@ -13,8 +25,6 @@ src\ASF\common\services\usb\class\cdc\device\udi_cdc.c
 src\ASF\common\services\usb\class\cdc\device\udi_cdc_desc.c
 
 src\ASF\common\services\usb\udc\udc.c
-
-src\ASF\sam0\drivers\adc\adc_sam_d_r\adc.c
 
 src\ASF\sam0\drivers\extint\extint_callback.c
 
@@ -35,8 +45,6 @@ src\ASF\sam0\drivers\usb\usb_sam_d_r\usb.c
 src\Core\adc.c
 
 src\ASF\sam0\drivers\port\port.c
-
-src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master.c
 
 src\Core\hmi.c
 
