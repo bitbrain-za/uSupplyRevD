@@ -20,6 +20,8 @@ src\Console\cdc.c
 
 src\Console\console.c
 
+src\Core\delay.c
+
 src\ASF\common\services\usb\class\cdc\device\udi_cdc.c
 
 src\ASF\common\services\usb\class\cdc\device\udi_cdc_desc.c

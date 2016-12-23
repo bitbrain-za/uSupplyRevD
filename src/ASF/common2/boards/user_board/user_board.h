@@ -19,6 +19,12 @@ Clock
 #define BOARD_OSC_STARTUP_US      15625
 
 /*
+TC
+*/
+
+#define DELAY_TC TC3
+
+/*
 GPIO
 */
 

@@ -22,8 +22,8 @@ void disp_SendCommand(U8 val);
 
 
 
-#define _delay_us(x) 
-#define _delay_ms(x)
+#define _delay_us(x) delay_us(x) 
+#define _delay_ms(x) delay_ms(x)
 
 
 /*

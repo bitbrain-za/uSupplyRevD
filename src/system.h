@@ -20,8 +20,10 @@
 #include <asf.h>
 
 #include "Core/adc.h"
+#include "Core/delay.h"
 #include "Core/qms.h"
 #include "Core/hmi.h"
+
 
 #include "Console/console.h"
 

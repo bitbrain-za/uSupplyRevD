@@ -807,6 +807,12 @@
     <Compile Include="src\Console\console.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\Core\delay.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Core\delay.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\main.h">
       <SubType>compile</SubType>
     </Compile>
