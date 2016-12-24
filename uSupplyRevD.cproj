@@ -42,6 +42,7 @@
   </options>
   <configurations>
     <configuration key="config.sam0.drivers.extint" value="callback" default="callback" content-id="Atmel.ASF" />
+    <configuration key="common2.services.gfx_mono.display" value="null" default="null" content-id="Atmel.ASF" />
   </configurations>
   <files>
     <file path="src/main.c" framework="" version="" source="common2/applications/user_application/main.c" changed="False" content-id="Atmel.ASF" />
@@ -664,6 +665,8 @@
     <Folder Include="src\ASF\common2\" />
     <Folder Include="src\ASF\common2\boards\" />
     <Folder Include="src\ASF\common2\boards\user_board\" />
+    <Folder Include="src\ASF\common2\services\" />
+    <Folder Include="src\ASF\common2\services\gfx_mono\" />
     <Folder Include="src\ASF\common\" />
     <Folder Include="src\ASF\common\boards\" />
     <Folder Include="src\ASF\common\services\" />

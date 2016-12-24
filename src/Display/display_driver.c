@@ -5,40 +5,55 @@
  *  Author: Philip
  */ 
 
- #include "../system.h"
- #include "display_driver.h"
-
-static const U8 COLUMN_OFFSET = 0x00;
+#include "../system.h"
+#include "display_driver.h"
 
 /*
-Prototypes
+    ____             __        __
+   / __ \_________  / /_____  / /___  ______  ___  _____
+  / /_/ / ___/ __ \/ __/ __ \/ __/ / / / __ \/ _ \/ ___/
+ / ____/ /  / /_/ / /_/ /_/ / /_/ /_/ / /_/ /  __(__  )
+/_/   /_/   \____/\__/\____/\__/\__, / .___/\___/____/
+                               /____/_/
 */
 
+void v_disp_paint_page(U8 page);
 void disp_SetPowerMode(bool VoltageFollower, bool VoltageRegulator, bool VoltageConverter);
 void disp_SendData(U8 val);
 void disp_SendCommand(U8 val);
 void disp_reset(void);
 
-/* Pins */
-
-
-
-#define _delay_us(x) delay_us(x) 
-#define _delay_ms(x) delay_ms(x)
-
+void disp_put_data(U8 data);
+void disp_trigger_write(void);
 
 /*
-External Functions
+   ________      __          __   _    __           _       __    __
+  / ____/ /___  / /_  ____ _/ /  | |  / /___ ______(_)___ _/ /_  / /__  _____
+ / / __/ / __ \/ __ \/ __ `/ /   | | / / __ `/ ___/ / __ `/ __ \/ / _ \/ ___/
+/ /_/ / / /_/ / /_/ / /_/ / /    | |/ / /_/ / /  / / /_/ / /_/ / /  __(__  )
+\____/_/\____/_.___/\__,_/_/     |___/\__,_/_/  /_/\__,_/_.___/_/\___/____/
 */
 
-void disp_init(void)
+static U8 *gucp_lcd_ram_buffer;
+static const U8 COLUMN_OFFSET = 0x00;
+
+/*
+    ______     __                        __   ______                 __  _
+   / ____/  __/ /____  _________  ____ _/ /  / ____/_  ______  _____/ /_(_)___  ____  _____
+  / __/ | |/_/ __/ _ \/ ___/ __ \/ __ `/ /  / /_  / / / / __ \/ ___/ __/ / __ \/ __ \/ ___/
+ / /____>  </ /_/  __/ /  / / / / /_/ / /  / __/ / /_/ / / / / /__/ /_/ / /_/ / / / (__  )
+/_____/_/|_|\__/\___/_/  /_/ /_/\__,_/_/  /_/    \__,_/_/ /_/\___/\__/_/\____/_/ /_/____/
+*/
+
+void disp_init(U8 *ram_buffer)
 {
+  gucp_lcd_ram_buffer = ram_buffer;
   LCD_RDPinSet();
   LCD_ChipSelect();
 
   disp_reset();
   
-  _delay_ms(500);
+  delay_ms(500);
 
   disp_SendCommand(DISP_LCD_BIAS_DIV9);
   disp_SendCommand(DISP_ADC_NORMAL);
@@ -60,33 +75,14 @@ void disp_init(void)
   LCD_ChipDeselect();
 }
 
-void disp_reset(void)
+void v_disp_paint(void)
 {
-  port_pin_set_output_level(LCD_RES_PIN, false);
-  delay_ms(100); 
-  port_pin_set_output_level(LCD_RES_PIN, true);
-}
+  U8 page = 0;
 
-void disp_put_data(U8 data)
-{
-  port_pin_set_output_level(LCD_DB7_PIN, ( (data & (0x01 << 7)) == (0x01 << 7) ));
-  port_pin_set_output_level(LCD_DB6_PIN, ( (data & (0x01 << 6)) == (0x01 << 6) ));
-  port_pin_set_output_level(LCD_DB5_PIN, ( (data & (0x01 << 5)) == (0x01 << 5) ));
-  port_pin_set_output_level(LCD_DB4_PIN, ( (data & (0x01 << 4)) == (0x01 << 4) ));
-  port_pin_set_output_level(LCD_DB3_PIN, ( (data & (0x01 << 3)) == (0x01 << 3) ));
-  port_pin_set_output_level(LCD_DB2_PIN, ( (data & (0x01 << 2)) == (0x01 << 2) ));
-  port_pin_set_output_level(LCD_DB1_PIN, ( (data & (0x01 << 1)) == (0x01 << 1) ));
-  port_pin_set_output_level(LCD_DB0_PIN, ( (data & (0x01 << 0)) == (0x01 << 0) ));
-}
-
-
-void disp_trigger_write(void)
-{
-  _delay_us(20);
-  LCD_WRPinClear();
-  _delay_us(100);
-  LCD_WRPinSet();
-  _delay_us(20);
+  for(page = 0 ; page < LCD_PAGES ; page++)
+  {
+    v_disp_paint_page(page);
+  }
 }
 
 bool disp_SetStartLine(U8 line)
@@ -137,33 +133,6 @@ bool disp_SetContrast(U8 val)
   return true;
 }
 
-void disp_SetPowerMode(bool VoltageFollower, bool VoltageRegulator, bool VoltageConverter)
-{
-  LCD_ChipSelect();
-  U8 val = 0x00;
-
-  val += (VoltageFollower) ? 0x01 : 0x00;
-  val += (VoltageRegulator) ? 0x02 : 0x00;
-  val += (VoltageConverter) ? 0x04 : 0x00;
-
-  disp_SendCommand(DISP_SET_POWER_MODE | val);
-  LCD_ChipDeselect();
-}
-
-void disp_SendData(U8 val)
-{
-  LCD_DataMode();
-  disp_put_data(val);
-  disp_trigger_write();
-}
-
-void disp_SendCommand(U8 val)
-{
-  LCD_CommandMode();
-  disp_put_data(val);
-  disp_trigger_write();
-}
-
 void disp_Clear(bool Invert)
 {
   unsigned char i;
@@ -201,5 +170,89 @@ void disp_ClearLine(U8 line, bool Invert)
 U8 disp_PutChar(char c)
 {
   return 0;
+}
+
+/*
+    __                     __   ______                 __  _
+   / /   ____  _________ _/ /  / ____/_  ______  _____/ /_(_)___  ____  _____
+  / /   / __ \/ ___/ __ `/ /  / /_  / / / / __ \/ ___/ __/ / __ \/ __ \/ ___/
+ / /___/ /_/ / /__/ /_/ / /  / __/ / /_/ / / / / /__/ /_/ / /_/ / / / (__  )
+/_____/\____/\___/\__,_/_/  /_/    \__,_/_/ /_/\___/\__/_/\____/_/ /_/____/
+*/
+
+void disp_reset(void)
+{
+  port_pin_set_output_level(LCD_RES_PIN, false);
+  delay_ms(100); 
+  port_pin_set_output_level(LCD_RES_PIN, true);
+}
+
+void v_disp_paint_page(U8 page)
+{
+  U8 column = 0;
+  U8 *ptr_data = gucp_lcd_ram_buffer + (page * LCD_COLUMNS);
+
+  disp_SetColumnAddress(column);
+  disp_SetPageAddress(page);
+
+  LCD_ChipSelect();
+  LCD_DataMode();
+
+  for(column = 0 ; column < LCD_COLUMNS ; column++)
+  {
+    disp_put_data(*ptr_data);
+    disp_trigger_write();
+    ptr_data++;
+  }
+
+  LCD_ChipDeselect();
+}
+
+void disp_SetPowerMode(bool VoltageFollower, bool VoltageRegulator, bool VoltageConverter)
+{
+  LCD_ChipSelect();
+  U8 val = 0x00;
+
+  val += (VoltageFollower) ? 0x01 : 0x00;
+  val += (VoltageRegulator) ? 0x02 : 0x00;
+  val += (VoltageConverter) ? 0x04 : 0x00;
+
+  disp_SendCommand(DISP_SET_POWER_MODE | val);
+  LCD_ChipDeselect();
+}
+
+void disp_SendData(U8 val)
+{
+  LCD_DataMode();
+  disp_put_data(val);
+  disp_trigger_write();
+}
+
+void disp_SendCommand(U8 val)
+{
+  LCD_CommandMode();
+  disp_put_data(val);
+  disp_trigger_write();
+}
+
+void disp_put_data(U8 data)
+{
+  port_pin_set_output_level(LCD_DB7_PIN, ( (data & (0x01 << 7)) == (0x01 << 7) ));
+  port_pin_set_output_level(LCD_DB6_PIN, ( (data & (0x01 << 6)) == (0x01 << 6) ));
+  port_pin_set_output_level(LCD_DB5_PIN, ( (data & (0x01 << 5)) == (0x01 << 5) ));
+  port_pin_set_output_level(LCD_DB4_PIN, ( (data & (0x01 << 4)) == (0x01 << 4) ));
+  port_pin_set_output_level(LCD_DB3_PIN, ( (data & (0x01 << 3)) == (0x01 << 3) ));
+  port_pin_set_output_level(LCD_DB2_PIN, ( (data & (0x01 << 2)) == (0x01 << 2) ));
+  port_pin_set_output_level(LCD_DB1_PIN, ( (data & (0x01 << 1)) == (0x01 << 1) ));
+  port_pin_set_output_level(LCD_DB0_PIN, ( (data & (0x01 << 0)) == (0x01 << 0) ));
+}
+
+void disp_trigger_write(void)
+{
+  delay_us(20);
+  LCD_WRPinClear();
+  delay_us(100);
+  LCD_WRPinSet();
+  delay_us(20);
 }
 

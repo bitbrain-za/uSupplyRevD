@@ -16,7 +16,6 @@ int main (void)
   system_init();
   sleepmgr_init();
   delay_init();
-
  
   display_init();
 
@@ -28,7 +27,7 @@ int main (void)
 
   udc_start();
 
-  PutStr("test", false, JUST_CENTER);
+  PutStr("A", false, JUST_LEFT);
 
   while(1)
   {

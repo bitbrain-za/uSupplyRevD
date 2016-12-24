@@ -38,6 +38,8 @@ SUBDIRS :=  \
 ../src/ASF/common2/ \
 ../src/ASF/common2/boards/ \
 ../src/ASF/common2/boards/user_board/ \
+../src/ASF/common2/services/ \
+../src/ASF/common2/services/gfx_mono/ \
 ../src/ASF/common/ \
 ../src/ASF/common/boards/ \
 ../src/ASF/common/services/ \

@@ -11,7 +11,7 @@
 U8 *get_char(Font *ptr_font, char c)
 {
   U8 *ptr = (U8 *)ptr_font->charmap[(U8)c - 0x20];
-  return (++ptr);
+  return (ptr);
 }
 
 U8 char_width(Font *ptr_font, char c)

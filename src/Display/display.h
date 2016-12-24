@@ -11,7 +11,10 @@
 
 
 #define LCD_COLUMNS   128
+#define LCD_ROWS      64
 #define LCD_PAGES     8
+
+#define LCD_RAM_BYTES (U16)(LCD_COLUMNS * LCD_PAGES)
 
 typedef enum
 {
@@ -35,5 +38,7 @@ extern void GoToXY(U8 x, U8 y);
 
 extern void PutChar(unsigned char c, bool invert);
 extern void PutStr(char *str, bool invert, JUSTIFICATION justification);
+
+extern void SetFont(FONT_SIZE size);
 
 #endif /* DISPLAY_H_ */

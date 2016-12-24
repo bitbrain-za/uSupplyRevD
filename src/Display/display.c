@@ -24,9 +24,11 @@ Font *_font;
 U8 pos_x;
 U8 pos_y;
 
+static U8 guca_display_frame_buffer[LCD_PAGES][LCD_COLUMNS];
+
 void display_init()
 {
-  disp_init();
+  disp_init(&guca_display_frame_buffer[0][0]);
 
   ClearScreen(false);
   SmallFont.charmap = small_font;
@@ -100,7 +102,7 @@ void PutStr(char *str, bool invert, JUSTIFICATION justification)
 void PutChar(unsigned char c, bool invert)
 {
   const U8* character = get_char(_font, c);
-  U8 length = character++;
+  U8 length = *character++;
   int i = 0;
   int j = 0;
   U8 data = 0;
@@ -118,44 +120,21 @@ void PutChar(unsigned char c, bool invert)
 
   for(j = 0 ; j < _font->height ; j ++)
   {
-
-    disp_SetColumnAddress(pos_x);
-    disp_SetPageAddress(pos_y + j);
-    
-    LCD_ChipSelect();
-    LCD_DataMode();
-
-    for(i = 0 ; i < length ; i++) 
+    for(i = 0 ; i < length ; i++)
     {
-      data = (character++);
-
-      /* Low RAM fix */
-      if((pos_y + j) == 6)
-      {
-        data |= 0x80;
-      }
-
+      data = *character++;
       if(invert)
+      {
         data = ~data;
-
-      disp_put_data(data);
-      disp_trigger_write();
+      }
+      guca_display_frame_buffer[pos_y][pos_x + i] = data;
     }
-    LCD_ChipDeselect();
+    pos_y++;
   }
   pos_x += length;
+  v_disp_paint();
 }
  
-void WriteCharCol(U8 v, U8 x, U8 page, U8 colour)
-{
-  if(colour == 1)
-    v = ~v;
-
-  LCD_DataMode();
-  disp_put_data(v);
-  disp_trigger_write();
-}
-
  void SetFont(FONT_SIZE size)
  {
   switch(size)
