@@ -25,6 +25,8 @@ enum status_code EEPROM_Write(U16 address, U8 *data, U8 length)
   if(buffer == NULL)
     return STATUS_ERR_NO_MEMORY;
 
+  EEWP_DISABLE();
+
   buffer[0] = address_lower;
   memcpy(&buffer[1], data, length);
 
@@ -39,7 +41,6 @@ enum status_code EEPROM_Write(U16 address, U8 *data, U8 length)
     .hs_master_code  = 0x0,
   };
 
-  EEWP_DISABLE();
   res = i2c_master_write_packet_wait(&i2c_master_instance, &packet);
 
   EEWP_ENABLE();
@@ -51,6 +52,19 @@ enum status_code EEPROM_Write(U16 address, U8 *data, U8 length)
 
 enum status_code EEPROM_Read(U16 address, U8 length, U8 *data)
 {
+
+/*
+  struct i2c_master_packet packet = 
+  {
+    .address     = (DeviceAddress >> 1),
+    .data_length = length,
+    .data        = data,
+    .ten_bit_address = false,
+    .high_speed      = false,
+  };  
+  return eeprom_read_packet(&i2c_master_instance, address, &packet);
+*/
+
   U8 address_upper = DeviceAddress | (U8)((address & 0x0300) >> 7);
   U8 address_lower = (U8)(address & 0xFF);
 
@@ -80,23 +94,11 @@ enum status_code EEPROM_Read(U16 address, U8 length, U8 *data)
     return res;
   }
 
-  /*
-
   packet.data = data;
   packet.data_length = length;
 
-  res = i2c_master_read_packet_wait(&i2c_master_instance, &packet);
+  return i2c_master_read_packet_wait(&i2c_master_instance, &packet);
 
-  */
-  U8 counter = 0;
-  while(length--)
-  {
-    res = i2c_master_read_byte(&i2c_master_instance, &data[counter++]);
-  }
-
-  i2c_master_send_nack(&i2c_master_instance);
-
-  return res;
 }
 
 enum status_code EEPROM_WriteAndVerify(U16 address, U8 length, U8 *data)
@@ -150,7 +152,7 @@ bool EEPROM_Test(void)
   U8 buffer[10];
   memset(buffer, 0xAA, 10);
 
-  EEPROM_Read(0x0000, 10, buffer);
+  EEPROM_Read(0x00A0, 10, buffer);
   
   buffer[0] = 0x01;
   buffer[1] = 0x02;

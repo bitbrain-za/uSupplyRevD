@@ -587,6 +587,10 @@ enum status_code i2c_master_read_packet_wait_no_nack(
 		struct i2c_master_module *const module,
 		struct i2c_master_packet *const packet);
 
+
+extern enum status_code eeprom_read_packet(struct i2c_master_module *const module, U16 us_EEPROM_location, struct i2c_master_packet *const packet);
+
+
 /** @} */
 
 #ifdef FEATURE_I2C_DMA_SUPPORT
