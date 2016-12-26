@@ -21,6 +21,7 @@
 
 #include "Core/adc.h"
 #include "Core/delay.h"
+#include "Core/i2c.h"
 #include "Core/qms.h"
 #include "Core/hmi.h"
 

@@ -10,40 +10,38 @@
 static const U8 DeviceAddress = 0xA0;
 static const U16 MemorySize = 1024;
 
-EEPROM_RESULT EEPROM_Write(U16 address, U8 *data, U8 length)
+enum status_code EEPROM_Write(U16 address, U8 *data, U8 length)
 {
   U8 address_upper = DeviceAddress | (U8)((address & 0x0300) >> 7);
   U8 address_lower = (U8)(address & 0xFF);
 
   if(length == 0)
-    return EEPROM_ERROR_PARAMATER;
+    return STATUS_ERR_INVALID_ARG;
 
   if((address + length) > MemorySize)
-    return EEPROM_BOUNDARY_ERROR;
+    return STATUS_ERR_INVALID_ARG;
   
   U8 *buffer = (U8 *)malloc(1 + length);
   if(buffer == NULL)
-    return EEPROM_ERROR_MEMORY;
+    return STATUS_ERR_NO_MEMORY;
 
   buffer[0] = address_lower;
   memcpy(&buffer[1], data, length);
 
-  EEPROM_RESULT res = EEPROM_OKAY;
+  enum status_code res = STATUS_OK;
 
   struct i2c_master_packet packet = {
-    .address     = address_upper,
+    .address     = (address_upper >> 1),
     .data_length = length + 1,
-    .data        = data,
+    .data        = buffer,
     .ten_bit_address = false,
     .high_speed      = false,
     .hs_master_code  = 0x0,
   };
 
   EEWP_DISABLE();
-  if(!i2c_master_write_packet_wait(&i2c_master_instance, &packet))
-  {
-    res = EEPROM_ERROR_WRITING;
-  }
+  res = i2c_master_write_packet_wait(&i2c_master_instance, &packet);
+
   EEWP_ENABLE();
 
   free(buffer);
@@ -51,78 +49,99 @@ EEPROM_RESULT EEPROM_Write(U16 address, U8 *data, U8 length)
   return res;
 }
 
-EEPROM_RESULT EEPROM_Read(U16 address, U8 length, U8 *data)
+enum status_code EEPROM_Read(U16 address, U8 length, U8 *data)
 {
   U8 address_upper = DeviceAddress | (U8)((address & 0x0300) >> 7);
   U8 address_lower = (U8)(address & 0xFF);
 
+  enum status_code res = STATUS_OK;
+
   if(length == 0)
-  return EEPROM_ERROR_PARAMATER;
+    return STATUS_ERR_INVALID_ARG;
 
   if((address + length) > MemorySize)
-  return EEPROM_BOUNDARY_ERROR;
-  
-  EEPROM_RESULT res = EEPROM_OKAY;
+    return STATUS_ERR_BAD_ADDRESS;
 
-  struct i2c_master_packet packet = {
-    .address     = address_upper,
+  data[0] = address_lower;
+  
+  struct i2c_master_packet packet = 
+  {
+    .address     = (address_upper >> 1),
     .data_length = 1,
-    .data        = &address_lower,
+    .data        = data,
     .ten_bit_address = false,
     .high_speed      = false,
-    .hs_master_code  = 0x0,
   };
   
-  if(!i2c_master_write_packet_wait(&i2c_master_instance, &packet))
+  res = i2c_master_write_packet_wait(&i2c_master_instance, &packet);
+  
+  if(STATUS_OK != res)
   {
-    res = EEPROM_ERROR_ADDRESS;
+    return res;
   }
+
+  /*
 
   packet.data = data;
   packet.data_length = length;
 
-  if(!i2c_master_read_packet_wait(&i2c_master_instance, &packet))
+  res = i2c_master_read_packet_wait(&i2c_master_instance, &packet);
+
+  */
+  U8 counter = 0;
+  while(length--)
   {
-    res = EEPROM_ERROR_READING;
+    res = i2c_master_read_byte(&i2c_master_instance, &data[counter++]);
   }
+
+  i2c_master_send_nack(&i2c_master_instance);
 
   return res;
 }
 
-EEPROM_RESULT EEPROM_WriteAndVerify(U16 address, U8 length, U8 *data)
+enum status_code EEPROM_WriteAndVerify(U16 address, U8 length, U8 *data)
 {
   U8 i = 0;
-  EEPROM_RESULT res = EEPROM_OKAY;
+  enum status_code res = STATUS_OK;
+
   if((address + length) > MemorySize)
-  return EEPROM_BOUNDARY_ERROR;
+    return STATUS_ERR_BAD_ADDRESS;
 
   U8 *temp = (U8 *)malloc(length);
   if(temp == NULL)
-  return EEPROM_ERROR_MEMORY;
+    return STATUS_ERR_NO_MEMORY;
 
   memset(temp, 0, length);
 
   res = EEPROM_Write(address, data, length);
 
-  if(res != EEPROM_OKAY)
-  return res;
+  if(STATUS_OK != res)
+  {
+    free(temp);
+    return res;
+  }
 
 //  _delay_ms(500);
 
   res = EEPROM_Read(address, length, temp);
 
-  if(res != EEPROM_OKAY)
-  return res;
+  if(STATUS_OK != res)
+  {
+    free(temp);
+    return res;
+  }
 
   for(i = 1; i < length ; i++)
   {
     if(temp[i] != data[i])
     {
       memcpy(data, temp, length);
-      return EEPROM_ERROR_DATA_MISMATCH;
+      free(temp);
+      return STATUS_ERR_BAD_DATA;
     }
   }
 
+  free(temp);
   return res;
 }
 
@@ -131,8 +150,8 @@ bool EEPROM_Test(void)
   U8 buffer[10];
   memset(buffer, 0xAA, 10);
 
-  EEPROM_Read(0, 10, buffer);
-
+  EEPROM_Read(0x0000, 10, buffer);
+  
   buffer[0] = 0x01;
   buffer[1] = 0x02;
   buffer[2] = 0x03;
@@ -144,8 +163,8 @@ bool EEPROM_Test(void)
   buffer[8] = 0x09;
   buffer[9] = 0x0a;
 
-  if(EEPROM_WriteAndVerify(0x0000, 10, buffer) != EEPROM_OKAY)
-  return false;
+  if(STATUS_OK != EEPROM_WriteAndVerify(0x0000, 10, buffer))
+    return false;
 
   return true;
 }

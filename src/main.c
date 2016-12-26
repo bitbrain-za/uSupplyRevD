@@ -2,7 +2,7 @@
 
 struct i2c_master_module i2c_master_instance;
 
-void configure_i2c_master(struct i2c_master_module *const module);
+void configure_i2c_master(void);
 
 void SysTick_Handler(void)
 {
@@ -15,19 +15,26 @@ int main (void)
 	
   system_init();
   sleepmgr_init();
+  configure_i2c_master();
   delay_init();
  
   display_init();
 
   console_fsm(true);
 
-//  configure_i2c_master(&i2c_master_instance);
-  
+  dac_SetReference(VREF_VREFPIN, 2048);
+  dac_SetVoltage(10000);
 //  adc_initialise();
 
-  udc_start();
-
-  PutStr("A", false, JUST_LEFT);
+  //udc_start();
+  if(EEPROM_Test())
+  {
+    PutStr((char *)"Pass", false, JUST_LEFT);
+  }
+  else
+  {
+    PutStr((char *)"Fail", false, JUST_LEFT);
+  }
 
   while(1)
   {
@@ -38,13 +45,17 @@ int main (void)
   }
 }
 
-void configure_i2c_master(struct i2c_master_module *const module)
+void configure_i2c_master(void)
 {
   struct i2c_master_config config_i2c_master;
   i2c_master_get_config_defaults(&config_i2c_master);
 
-  config_i2c_master.buffer_timeout = 10000;
+  config_i2c_master.buffer_timeout = 65535;
+  config_i2c_master.generator_source = GCLK_GENERATOR_3;
+  config_i2c_master.pinmux_pad0 = I2C_SDA_PINMUX;
+  config_i2c_master.pinmux_pad1 = I2C_SCL_PINMUX;
 
-  i2c_master_init(module, I2C_MODULE, &config_i2c_master);
-  i2c_master_enable(module);
+  while(i2c_master_init(&i2c_master_instance, I2C_MODULE, &config_i2c_master) != STATUS_OK);
+
+  i2c_master_enable(&i2c_master_instance);
 }

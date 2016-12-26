@@ -30,8 +30,8 @@ typedef enum
 }DAC_VREF;
 
 
-bool WriteConfig(U8 c);
-void SetReference(DAC_VREF ref, U16 value);
-void SetVoltage(U16 level);
+bool dac_WriteConfig(U8 c);
+void dac_SetReference(DAC_VREF ref, U16 value);
+void dac_SetVoltage(U16 level);
 
 #endif /* DAC_H_ */

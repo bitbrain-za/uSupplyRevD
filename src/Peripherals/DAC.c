@@ -19,34 +19,34 @@ U16 vref;
 Prototypes
 */
 
-bool WriteVolatileDACRegister(U16 level);
-bool WriteVolatileMemory(U16 level);
-bool WriterAllMemory(U16 level);
+bool dac_WriteVolatileDACRegister(U16 level);
+bool dac_WriteVolatileMemory(U16 level);
+bool dac_WriterAllMemory(U16 level);
 
 /*
 External Functions
 */
 
-void SetReference(DAC_VREF ref, U16 value)
+void dac_SetReference(DAC_VREF ref, U16 value)
 {
   config &= ~(0x18);
   config |= ref;
 
   vref = value;
 
-  WriteConfig(config);
+  dac_WriteConfig(config);
 }
 
-void SetVoltage(U16 level)
+void dac_SetVoltage(U16 level)
 {
-  WriteVolatileDACRegister(level / 20);
+  dac_WriteVolatileDACRegister(level / 20);
 }
 
 /*
 Local Functions
 */
 
-bool WriteVolatileDACRegister(U16 level)
+bool dac_WriteVolatileDACRegister(U16 level)
 {
   U8 buffer[2];
 
@@ -57,7 +57,7 @@ bool WriteVolatileDACRegister(U16 level)
   buffer[1] = (U8)(0xFF & level);
 
   struct i2c_master_packet packet = {
-    .address     = DeviceAddress,
+    .address     = DeviceAddress >> 1,
     .data_length = 2,
     .data        = buffer,
     .ten_bit_address = false,
@@ -68,7 +68,7 @@ bool WriteVolatileDACRegister(U16 level)
   return i2c_master_write_packet_wait(&i2c_master_instance, &packet);
 }
 
-bool WriteVolatileMemory(U16 level)
+bool dac_WriteVolatileMemory(U16 level)
 {
   U8 buffer[3];
   buffer[0] = MCP47X6_CMD_VOLALL | config;
@@ -80,7 +80,7 @@ bool WriteVolatileMemory(U16 level)
   buffer[2] = (0xFF & level);
 
   struct i2c_master_packet packet = {
-    .address     = DeviceAddress,
+    .address     = DeviceAddress >> 1,
     .data_length = 3,
     .data        = buffer,
     .ten_bit_address = false,
@@ -91,7 +91,7 @@ bool WriteVolatileMemory(U16 level)
   return i2c_master_write_packet_wait(&i2c_master_instance, &packet);
 }
 
-bool WriterAllMemory(U16 level)
+bool dac_WriterAllMemory(U16 level)
 {
   U8 buffer[3];
   buffer[0] = MCP47X6_CMD_ALL | config;
@@ -104,7 +104,7 @@ bool WriterAllMemory(U16 level)
 
 
   struct i2c_master_packet packet = {
-    .address     = DeviceAddress,
+    .address     = DeviceAddress >> 1,
     .data_length = 3,
     .data        = buffer,
     .ten_bit_address = false,
@@ -115,12 +115,12 @@ bool WriterAllMemory(U16 level)
   return i2c_master_write_packet_wait(&i2c_master_instance, &packet);
 }
 
-bool WriteConfig(U8 c)
+bool dac_WriteConfig(U8 c)
 {
   c |= MCP47X6_CMD_VOLCONFIG;
 
   struct i2c_master_packet packet = {
-    .address     = DeviceAddress,
+    .address     = DeviceAddress >> 1,
     .data_length = 1,
     .data        = &c,
     .ten_bit_address = false,

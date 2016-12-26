@@ -249,10 +249,8 @@ void disp_put_data(U8 data)
 
 void disp_trigger_write(void)
 {
-  delay_us(20);
   LCD_WRPinClear();
-  delay_us(100);
+  delay_us(1);
   LCD_WRPinSet();
-  delay_us(20);
 }
 

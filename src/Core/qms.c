@@ -75,7 +75,7 @@ bool b_queue_read(Queue *queue, void *return_data)
 
   for(i = 0 ; i < queue->items; i++)
   {
-    memcpy(data_ptr, data_ptr + queue->item_size, queue->item_size);
+    memcpy(data_ptr, (void *)((U8 *)data_ptr + queue->item_size), queue->item_size);
     data_ptr += queue->item_size;
   }
   return true;
@@ -90,5 +90,5 @@ void *next_free(Queue *queue)
   if(b_is_queue_full(queue))
     return NULL;
   else
-    return (queue->data + (queue->items * queue->item_size));
+    return ((U8 *)queue->data + (queue->items * queue->item_size));
 }

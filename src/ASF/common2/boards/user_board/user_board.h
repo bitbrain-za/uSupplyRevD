@@ -34,6 +34,9 @@ GPIO
 #define EEWP_ENABLE()             port_pin_set_output_level(EEWP_PIN,true)
 #define EEWP_DISABLE()            port_pin_set_output_level(EEWP_PIN,false)
 
+#define I2C_SDA_PINMUX            PINMUX_PA16C_SERCOM1_PAD0
+#define I2C_SCL_PINMUX            PINMUX_PA17C_SERCOM1_PAD1
+
 /*
 LCD
 */

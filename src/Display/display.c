@@ -53,7 +53,7 @@ void ClearLine(U8 line, bool invert)
   disp_ClearLine(line, invert);
 }
 
-void GotoXY(unsigned char x, unsigned char y)
+void GoToXY(U8 x, U8 y)
 {
   if(x < LCD_COLUMNS - 1)
     pos_x = x;
@@ -106,6 +106,7 @@ void PutChar(unsigned char c, bool invert)
   int i = 0;
   int j = 0;
   U8 data = 0;
+  U8 y_index;
   
   if((pos_x + length) >= LCD_COLUMNS)
   {
@@ -118,6 +119,8 @@ void PutChar(unsigned char c, bool invert)
   else
     pos_x++;
 
+  y_index = pos_y;
+
   for(j = 0 ; j < _font->height ; j ++)
   {
     for(i = 0 ; i < length ; i++)
@@ -127,9 +130,9 @@ void PutChar(unsigned char c, bool invert)
       {
         data = ~data;
       }
-      guca_display_frame_buffer[pos_y][pos_x + i] = data;
+      guca_display_frame_buffer[y_index][pos_x + i] = data;
     }
-    pos_y++;
+    y_index++;
   }
   pos_x += length;
   v_disp_paint();

@@ -35,7 +35,6 @@ extern void display_init(void);
 extern void ClearScreen(bool invert);
 extern void ClearLine(U8 line, bool invert);
 extern void GoToXY(U8 x, U8 y);
-
 extern void PutChar(unsigned char c, bool invert);
 extern void PutStr(char *str, bool invert, JUSTIFICATION justification);
 

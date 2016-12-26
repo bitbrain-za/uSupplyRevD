@@ -10,8 +10,6 @@ src\ASF\sam0\drivers\adc\adc_sam_d_r\adc_callback.c
 
 src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master.c
 
-src\ASF\sam0\drivers\sercom\i2c\i2c_sam0\i2c_master_interrupt.c
-
 src\ASF\sam0\drivers\tc\tc_interrupt.c
 
 src\ASF\sam0\drivers\tc\tc_sam_d_r\tc.c
@@ -49,6 +47,8 @@ src\Core\adc.c
 src\ASF\sam0\drivers\port\port.c
 
 src\Core\hmi.c
+
+src\Core\i2c.c
 
 src\Core\qms.c
 

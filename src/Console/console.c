@@ -9,8 +9,8 @@
 
 typedef struct
 {
-  char* cmd;
-  char* help;
+  const char* cmd;
+  const char* help;
 
   CONSOLE_COMMAND_RESULTS (*function)(char *param);
 }console_command;
