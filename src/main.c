@@ -17,8 +17,10 @@ int main (void)
   sleepmgr_init();
   configure_i2c_master();
   delay_init();
- 
-  display_init();
+  timer_module_init();
+
+  TIMER_HANDLE test = timer_new(5000);
+  desktop_FSM(true);
 
   console_fsm(true);
 
@@ -26,22 +28,23 @@ int main (void)
   dac_SetVoltage(10000);
 //  adc_initialise();
 
-  //udc_start();
-  if(EEPROM_Test())
-  {
-    PutStr((char *)"Pass", false, JUST_LEFT);
-  }
-  else
-  {
-    PutStr((char *)"Fail", false, JUST_LEFT);
-  }
+  udc_start();
+
+  HMI_FSM(true);
+
+	system_interrupt_enable_global();
+  timer_start(test);
 
   while(1)
   {
     console_fsm(false);
-
-    delay_ms(500);
-    port_pin_toggle_output_level(LED0);
+    HMI_FSM(false);
+    desktop_FSM(false);
+    if(test->Expired)
+    {
+      timer_reset(test);
+      port_pin_toggle_output_level(LED0);
+    }
   }
 }
 

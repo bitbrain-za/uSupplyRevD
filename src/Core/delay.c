@@ -21,7 +21,7 @@ void delay_init(void)
   /* 1 MHz -> 1 us*/
   config_tc.counter_8_bit.period = 8;
 
-  tc_init(&tc_instance, TC3, &config_tc);
+  tc_init(&tc_instance, DELAY_TC, &config_tc);
 
   tc_enable(&tc_instance);
   tc_stop_counter(&tc_instance);

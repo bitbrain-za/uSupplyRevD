@@ -9,6 +9,15 @@
 
 #include "../system.h"
 
+typedef enum
+{
+  ADC_INIT,
+  ADC_READ_VOLTAGE,
+  ADC_READ_CURRENT,
+  ADC_READ_TEMPERATURE,
+  ADC_PAUSE,
+}ADC_STATES;
+
 /*
 Prototypes
 */
@@ -19,6 +28,44 @@ void adc_config_temperature(void);
 /*
 External Functions
 */
+
+void ADC_FSM(bool reset)
+{
+  static ADC_STATES state = ADC_INIT;
+
+  if(reset)
+  {
+    state = ADC_INIT;
+  }
+
+  switch(state)
+  {
+    case ADC_INIT:
+    adc_initialise();
+    state = ADC_READ_VOLTAGE;
+    break;
+
+    case ADC_READ_VOLTAGE:
+    eus_raw_voltage_reading = ReadVoltage();
+    state = ADC_READ_CURRENT;
+    break;
+
+    case ADC_READ_CURRENT:
+    eus_raw_current_reading = ReadCurrent();
+    state = ADC_READ_TEMPERATURE;
+    break;
+
+    case ADC_READ_TEMPERATURE:
+    eus_raw_temperature_reading = ReadTemperature();
+    state = ADC_PAUSE;
+    break;  
+
+    case ADC_PAUSE:
+    state = ADC_READ_VOLTAGE;
+    break;
+  }
+}
+
 
 void adc_initialise(void)
 {

@@ -45,11 +45,15 @@ void display_init()
 
 void ClearScreen(bool Invert)
 {
+  U8 temp = Invert ? 0xFF : 0x00;
+  memset(guca_display_frame_buffer, temp, LCD_COLUMNS * LCD_PAGES);
   disp_Clear(Invert);
 }
 
 void ClearLine(U8 line, bool invert)
 {
+  U8 temp = invert ? 0xFF : 0x00;
+  memset(&guca_display_frame_buffer[line][0], temp, LCD_COLUMNS);
   disp_ClearLine(line, invert);
 }
 
@@ -138,14 +142,14 @@ void PutChar(unsigned char c, bool invert)
   v_disp_paint();
 }
  
- void SetFont(FONT_SIZE size)
- {
+void SetFont(FONT_SIZE size)
+{
   switch(size)
   {
     case FONT_SMALL:
     _font = &SmallFont;
     break;
-    
+
     case FONT_MEDIUM:
     _font = &SitkaMed;
     break;
@@ -153,4 +157,4 @@ void PutChar(unsigned char c, bool invert)
     case FONT_LARGE:
     break;
   }
- }
+}

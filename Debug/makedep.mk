@@ -52,6 +52,10 @@ src\Core\i2c.c
 
 src\Core\qms.c
 
+src\Core\timer.c
+
+src\Display\desktop.c
+
 src\Display\display.c
 
 src\Display\display_driver.c

@@ -152,7 +152,7 @@ bool EEPROM_Test(void)
   U8 buffer[10];
   memset(buffer, 0xAA, 10);
 
-  EEPROM_Read(0x00A0, 10, buffer);
+  EEPROM_Read(0x0000, 10, buffer);
   
   buffer[0] = 0x01;
   buffer[1] = 0x02;

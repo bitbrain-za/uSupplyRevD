@@ -147,12 +147,7 @@ void disp_ClearLine(U8 line, bool Invert)
 {
   U8 data = (Invert) ? 0xFF : 0x00;
   unsigned char j;
-
-  if(line == 6)
-  {
-    data ^= 0x80;
-  }
-  
+ 
   disp_SetColumnAddress(0);
   disp_SetPageAddress(line);
 

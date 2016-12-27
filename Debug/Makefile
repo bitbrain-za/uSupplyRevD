@@ -143,6 +143,8 @@ C_SRCS +=  \
 ../src/Core/hmi.c \
 ../src/Core/i2c.c \
 ../src/Core/qms.c \
+../src/Core/timer.c \
+../src/Display/desktop.c \
 ../src/Display/display.c \
 ../src/Display/display_driver.c \
 ../src/Display/fonts.c \
@@ -195,6 +197,8 @@ src/ASF/sam0/drivers/port/port.o \
 src/Core/hmi.o \
 src/Core/i2c.o \
 src/Core/qms.o \
+src/Core/timer.o \
+src/Display/desktop.o \
 src/Display/display.o \
 src/Display/display_driver.o \
 src/Display/fonts.o \
@@ -240,6 +244,8 @@ src/ASF/sam0/drivers/port/port.o \
 src/Core/hmi.o \
 src/Core/i2c.o \
 src/Core/qms.o \
+src/Core/timer.o \
+src/Display/desktop.o \
 src/Display/display.o \
 src/Display/display_driver.o \
 src/Display/fonts.o \
@@ -285,6 +291,8 @@ src/ASF/sam0/drivers/port/port.d \
 src/Core/hmi.d \
 src/Core/i2c.d \
 src/Core/qms.d \
+src/Core/timer.d \
+src/Display/desktop.d \
 src/Display/display.d \
 src/Display/display_driver.d \
 src/Display/fonts.d \
@@ -330,6 +338,8 @@ src/ASF/sam0/drivers/port/port.d \
 src/Core/hmi.d \
 src/Core/i2c.d \
 src/Core/qms.d \
+src/Core/timer.d \
+src/Display/desktop.d \
 src/Display/display.d \
 src/Display/display_driver.d \
 src/Display/fonts.d \
@@ -364,6 +374,10 @@ LINKER_SCRIPT_DEP+=  \
 
 
 # AVR32/GNU C Compiler
+
+
+
+
 
 
 

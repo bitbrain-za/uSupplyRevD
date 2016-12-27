@@ -9,11 +9,6 @@
 #ifndef SYSTEM_H_
 #define SYSTEM_H_
 
-#define VOLTAGE_ENCODER_MAX 127
-#define VOLTAGE_ENCODER_MIN -127
-
-#define CURRENT_ENCODER_MAX 127
-#define CURRENT_ENCODER_MIN -127
 
 #include <stdlib.h>
 #include <string.h>
@@ -24,12 +19,13 @@
 #include "Core/i2c.h"
 #include "Core/qms.h"
 #include "Core/hmi.h"
-
+#include "Core/timer.h"
 
 #include "Console/console.h"
 
 #include "Display/fonts.h"
 #include "Display/display.h"
+#include "Display/desktop.h"
 
 #include "Peripherals/DAC.h"
 #include "Peripherals/eeprom.h"

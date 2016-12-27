@@ -15,6 +15,10 @@
 
 extern struct adc_module adc_instance;
 
+extern U16 eus_raw_voltage_reading;
+extern U16 eus_raw_current_reading;
+extern U16 eus_raw_temperature_reading;
+
 #ifdef ADC_C_
   #undef extern
 #endif

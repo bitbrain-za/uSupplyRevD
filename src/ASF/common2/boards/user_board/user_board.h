@@ -20,8 +20,8 @@ Clock
 TC
 */
 
-#define DELAY_TC TC3
-
+#define DELAY_TC   TC3
+#define SYSTEM_TC  TC4
 /*
 GPIO
 */
@@ -127,7 +127,7 @@ Switches
 #define SW3_EIC_LINE              11
 
 #define SW4_NAME                  "SW4"
-#define SW4_PIN                   PIN_PA20
+#define SW4_PIN                   PIN_PA19
 #define SW4_ACTIVE                false
 #define SW4_INACTIVE              !SW4_ACTIVE
 #define SW4_EIC_PIN               PIN_PA20A_EIC_EXTINT4
@@ -141,7 +141,7 @@ Rotary Encoders
 */
 
 #define ENCODER_1_NAME            "Voltage Encoder"
-#define ENC1A                     PIN_PA19
+#define ENC1A                     PIN_PA20
 #define ENC1B                     PIN_PA18
 
 #define ENCODER_2_NAME            "Current Encoder"

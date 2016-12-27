@@ -71,7 +71,7 @@ static void config_encoders_and_switches(void)
   port_pin_set_config(ENC1A, &pin_conf);
   port_pin_set_config(ENC1B, &pin_conf);
   port_pin_set_config(ENC2A, &pin_conf);
-  port_pin_set_config(ENC2A, &pin_conf);
+  port_pin_set_config(ENC2B, &pin_conf);
 
   port_pin_set_config(SW0_PIN, &pin_conf);
   port_pin_set_config(SW1_PIN, &pin_conf);

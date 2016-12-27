@@ -944,6 +944,18 @@
     <Compile Include="src\Core\qms.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\Core\timer.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Core\timer.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Display\desktop.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Display\desktop.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\Display\display.c">
       <SubType>compile</SubType>
     </Compile>
