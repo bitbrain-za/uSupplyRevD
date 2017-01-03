@@ -126,6 +126,7 @@ C_SRCS +=  \
 ../src/ASF/sam0/drivers/tc/tc_sam_d_r/tc.c \
 ../src/Console/cdc.c \
 ../src/Console/console.c \
+../src/Core/config.c \
 ../src/Core/delay.c \
 ../src/ASF/common/services/usb/class/cdc/device/udi_cdc.c \
 ../src/ASF/common/services/usb/class/cdc/device/udi_cdc_desc.c \
@@ -141,7 +142,6 @@ C_SRCS +=  \
 ../src/Core/adc.c \
 ../src/ASF/sam0/drivers/port/port.c \
 ../src/Core/hmi.c \
-../src/Core/i2c.c \
 ../src/Core/qms.c \
 ../src/Core/timer.c \
 ../src/Display/desktop.c \
@@ -180,6 +180,7 @@ src/ASF/sam0/drivers/tc/tc_interrupt.o \
 src/ASF/sam0/drivers/tc/tc_sam_d_r/tc.o \
 src/Console/cdc.o \
 src/Console/console.o \
+src/Core/config.o \
 src/Core/delay.o \
 src/ASF/common/services/usb/class/cdc/device/udi_cdc.o \
 src/ASF/common/services/usb/class/cdc/device/udi_cdc_desc.o \
@@ -195,7 +196,6 @@ src/ASF/sam0/drivers/usb/usb_sam_d_r/usb.o \
 src/Core/adc.o \
 src/ASF/sam0/drivers/port/port.o \
 src/Core/hmi.o \
-src/Core/i2c.o \
 src/Core/qms.o \
 src/Core/timer.o \
 src/Display/desktop.o \
@@ -227,6 +227,7 @@ src/ASF/sam0/drivers/tc/tc_interrupt.o \
 src/ASF/sam0/drivers/tc/tc_sam_d_r/tc.o \
 src/Console/cdc.o \
 src/Console/console.o \
+src/Core/config.o \
 src/Core/delay.o \
 src/ASF/common/services/usb/class/cdc/device/udi_cdc.o \
 src/ASF/common/services/usb/class/cdc/device/udi_cdc_desc.o \
@@ -242,7 +243,6 @@ src/ASF/sam0/drivers/usb/usb_sam_d_r/usb.o \
 src/Core/adc.o \
 src/ASF/sam0/drivers/port/port.o \
 src/Core/hmi.o \
-src/Core/i2c.o \
 src/Core/qms.o \
 src/Core/timer.o \
 src/Display/desktop.o \
@@ -274,6 +274,7 @@ src/ASF/sam0/drivers/tc/tc_interrupt.d \
 src/ASF/sam0/drivers/tc/tc_sam_d_r/tc.d \
 src/Console/cdc.d \
 src/Console/console.d \
+src/Core/config.d \
 src/Core/delay.d \
 src/ASF/common/services/usb/class/cdc/device/udi_cdc.d \
 src/ASF/common/services/usb/class/cdc/device/udi_cdc_desc.d \
@@ -289,7 +290,6 @@ src/ASF/sam0/drivers/usb/usb_sam_d_r/usb.d \
 src/Core/adc.d \
 src/ASF/sam0/drivers/port/port.d \
 src/Core/hmi.d \
-src/Core/i2c.d \
 src/Core/qms.d \
 src/Core/timer.d \
 src/Display/desktop.d \
@@ -321,6 +321,7 @@ src/ASF/sam0/drivers/tc/tc_interrupt.d \
 src/ASF/sam0/drivers/tc/tc_sam_d_r/tc.d \
 src/Console/cdc.d \
 src/Console/console.d \
+src/Core/config.d \
 src/Core/delay.d \
 src/ASF/common/services/usb/class/cdc/device/udi_cdc.d \
 src/ASF/common/services/usb/class/cdc/device/udi_cdc_desc.d \
@@ -336,7 +337,6 @@ src/ASF/sam0/drivers/usb/usb_sam_d_r/usb.d \
 src/Core/adc.d \
 src/ASF/sam0/drivers/port/port.d \
 src/Core/hmi.d \
-src/Core/i2c.d \
 src/Core/qms.d \
 src/Core/timer.d \
 src/Display/desktop.d \

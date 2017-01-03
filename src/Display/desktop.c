@@ -8,6 +8,15 @@
 
 #include "../system.h"
 
+/*
+    ____       _____       _ __  _
+   / __ \___  / __(_)___  (_) /_(_)___  ____  _____
+  / / / / _ \/ /_/ / __ \/ / __/ / __ \/ __ \/ ___/
+ / /_/ /  __/ __/ / / / / / /_/ / /_/ / / / (__  )
+/_____/\___/_/ /_/_/ /_/_/\__/_/\____/_/ /_/____/
+
+*/
+
 typedef enum
 {
   DISP_DESKTOP,
@@ -21,8 +30,28 @@ typedef enum
   FUNC_TIMER,
 }FUNCTIONS;
 
+/*
+    ____             __        __
+   / __ \_________  / /_____  / /___  ______  ___  _____
+  / /_/ / ___/ __ \/ __/ __ \/ __/ / / / __ \/ _ \/ ___/
+ / ____/ /  / /_/ / /_/ /_/ / /_/ /_/ / /_/ /  __(__  )
+/_/   /_/   \____/\__/\____/\__/\__, / .___/\___/____/
+                               /____/_/
+*/
+
 void DisplayDesktop();
 void v_display_voltage(U16 voltage);
+void v_draw_grid(void);
+void v_draw_menu_bar(void);
+/*
+
+    ______     __                        __   ______                 __  _
+   / ____/  __/ /____  _________  ____ _/ /  / ____/_  ______  _____/ /_(_)___  ____  _____
+  / __/ | |/_/ __/ _ \/ ___/ __ \/ __ `/ /  / /_  / / / / __ \/ ___/ __/ / __ \/ __ \/ ___/
+ / /____>  </ /_/  __/ /  / / / / /_/ / /  / __/ / /_/ / / / / /__/ /_/ / /_/ / / / (__  )
+/_____/_/|_|\__/\___/_/  /_/ /_/\__,_/_/  /_/    \__,_/_/ /_/\___/\__/_/\____/_/ /_/____/
+
+*/
 
 void desktop_FSM(bool reset)
 {
@@ -57,6 +86,10 @@ void desktop_FSM(bool reset)
          GoToXY(0, 4);
          PutStr(str, false, JUST_CENTER);
       break;
+
+      default:
+        v_draw_menu_bar();        
+      break;
     }
   }
 
@@ -87,6 +120,15 @@ void desktop_FSM(bool reset)
   }
 }
 
+/*
+    __                     __   ______                 __  _
+   / /   ____  _________ _/ /  / ____/_  ______  _____/ /_(_)___  ____  _____
+  / /   / __ \/ ___/ __ `/ /  / /_  / / / / __ \/ ___/ __/ / __ \/ __ \/ ___/
+ / /___/ /_/ / /__/ /_/ / /  / __/ / /_/ / / / / /__/ /_/ / /_/ / / / (__  )
+/_____/\____/\___/\__,_/_/  /_/    \__,_/_/ /_/\___/\__/_/\____/_/ /_/____/
+
+*/
+
 void ClearVoltageArea(bool invert)
 {
   ClearLine(0, invert);
@@ -96,7 +138,6 @@ void ClearVoltageArea(bool invert)
 
 void ClearSecondArea(bool invert)
 {
-  ClearLine(3, invert);
   ClearLine(4, invert);
   ClearLine(5, invert);
   ClearLine(6, invert);
@@ -117,6 +158,43 @@ void v_display_voltage(U16 voltage)
   sprintf(str, "%d.%02d V", voltage/1000, (voltage%1000) / 10);
   GoToXY(0, 0);
   PutStr(str, false, JUST_CENTER);
+}
+
+void v_draw_grid(void)
+{
+  v_disp_draw_line(0, 28, LCD_COLUMNS - 1, 28, false);
+  v_disp_draw_line(0, 55, LCD_COLUMNS - 1, 55, false);
+}
+
+void v_draw_menu_bar(void)
+{
+  /* Btn 1 - On/Off */
+  /* Btn 2 - 3.3V 5V ADJ */
+  /* Btn 3 - C-Limit */
+  /* Btn 4 - Zero */
+
+  if(eb_voltage_on)
+    v_display_draw_button(0, 55, 32, 9, "On", false);
+  else
+    v_display_draw_button(0, 55, 32, 9, "Off", false);
+
+  switch(ex_voltage_adj)
+  {
+    case VOLTAGE_3V3:
+      v_display_draw_button(32, 55, 32, 9, "3V3", false);
+    break;
+
+    case VOLTAGE_5V0:
+      v_display_draw_button(32, 55, 32, 9, "5V0", false);
+    break;
+
+    case VOLTAGE_USER:
+      v_display_draw_button(32, 55, 32, 9, "User", false);
+    break;
+  }
+
+  v_display_draw_button(64, 55, 32, 9, "LIM", eb_current_limit_enabled);
+  v_display_draw_button(96, 55, 32, 9, "Zero", false);
 }
 
 void DisplayDesktop()

@@ -40,6 +40,8 @@ extern void PutStr(char *str, bool invert, JUSTIFICATION justification);
 
 extern void SetFont(FONT_SIZE size);
 
-extern void DrawButton(U8 pos, char *text, bool invert);
+extern void v_disp_draw_line(U8 x_start, U8 y_start, U8 x_end, U8 y_end, bool invert);
+
+extern void v_display_draw_button(U8 x, U8 y, U8 width, U8 height, const char *str, bool invert);
 
 #endif /* DISPLAY_H_ */

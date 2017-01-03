@@ -18,6 +18,8 @@ src\Console\cdc.c
 
 src\Console\console.c
 
+src\Core\config.c
+
 src\Core\delay.c
 
 src\ASF\common\services\usb\class\cdc\device\udi_cdc.c
@@ -47,8 +49,6 @@ src\Core\adc.c
 src\ASF\sam0\drivers\port\port.c
 
 src\Core\hmi.c
-
-src\Core\i2c.c
 
 src\Core\qms.c
 

@@ -797,6 +797,12 @@
     <Compile Include="src\Console\console.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="src\Core\config.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Core\config.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\Core\delay.c">
       <SubType>compile</SubType>
     </Compile>
@@ -930,12 +936,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Core\hmi.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\Core\i2c.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\Core\i2c.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\Core\qms.c">
