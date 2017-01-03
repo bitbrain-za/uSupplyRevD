@@ -19,7 +19,7 @@ int main (void)
   delay_init();
   timer_module_init();
 
-  TIMER_HANDLE test = timer_new(5000);
+  TIMER_HANDLE test = timer_new(100);
   desktop_FSM(true);
 
   console_fsm(true);
@@ -37,13 +37,14 @@ int main (void)
 
   while(1)
   {
+    ADC_FSM();
     console_fsm(false);
     HMI_FSM(false);
     desktop_FSM(false);
-    if(test->Expired)
+    if(timer_expired(test))
     {
-      timer_reset(test);
       port_pin_toggle_output_level(LED0);
+      timer_reset(test);
     }
   }
 }

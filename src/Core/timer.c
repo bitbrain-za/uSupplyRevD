@@ -34,7 +34,7 @@ void timer_module_init(void)
   /* 31 250 Hz */
   config_tc.clock_prescaler = TC_CLOCK_PRESCALER_DIV256;
   /* 1008 Hz */
-  config_tc.counter_8_bit.period = 31;
+  config_tc.counter_8_bit.period = 30;
     
   tc_init(&tc_instance_system, SYSTEM_TC, &config_tc);
 
@@ -68,6 +68,7 @@ TIMER_HANDLE timer_new(U32 period)
       TIMER_INT_DISABLE();
       gx_timer_list[i] = x_new_timer;
       TIMER_INT_ENABLE();
+      break;
     }
   }
 

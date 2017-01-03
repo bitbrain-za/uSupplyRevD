@@ -13,8 +13,6 @@
   #define extern
 #endif
 
-extern struct adc_module adc_instance;
-
 extern U16 eus_raw_voltage_reading;
 extern U16 eus_raw_current_reading;
 extern U16 eus_raw_temperature_reading;
@@ -23,10 +21,7 @@ extern U16 eus_raw_temperature_reading;
   #undef extern
 #endif
 
-extern void adc_initialise(void);
-extern U16 ReadVoltage(void);
-extern U16 ReadCurrent(void);
-extern U16 ReadTemperature(void);
+extern void ADC_FSM(void);
 
 
 
