@@ -69,6 +69,8 @@ void desktop_FSM(bool reset)
     ClearScreen(false);
     state = DISP_DESKTOP;
     b_queue_init(&queue_desktop_command, sizeof(DESKTOP_MESSAGE), 1);
+    v_draw_grid();
+    v_draw_menu_bar();
   }
 
   while(b_queue_read(&queue_HMI_input, &hmi_msg))
