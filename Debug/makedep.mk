@@ -2,6 +2,10 @@
 # Automatically-generated file. Do not edit or delete the file
 ################################################################################
 
+src\Application\current_control.c
+
+src\Application\voltage_control.c
+
 src\ASF\common\services\sleepmgr\samd\sleepmgr.c
 
 src\ASF\sam0\drivers\adc\adc_sam_d_r\adc.c

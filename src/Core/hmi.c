@@ -33,8 +33,8 @@ void HMI_FSM(bool reset)
   if(reset)
   {
     b_queue_init(&queue_HMI_input, sizeof(HMI_MESSAGE), 5);
-    ess_current_encoder_val = 0;
-    ess_voltage_encoder_val = 0; 
+    eus_current_encoder_val = 0;
+    eus_voltage_encoder_val = 0; 
     gx_state = HMI_IDLE;
   }
 
@@ -45,13 +45,13 @@ void HMI_FSM(bool reset)
     if(b_check_current_encoder())
     {
       tx_msg.source = HMI_ENC_C;
-      tx_msg.value = ess_current_encoder_val;
+      tx_msg.value = eus_current_encoder_val;
       b_queue_send(&queue_HMI_input, &tx_msg);
     }
     if(b_check_voltage_encoder())
     {
       tx_msg.source = HMI_ENC_V;
-      tx_msg.value = ess_voltage_encoder_val;
+      tx_msg.value = eus_voltage_encoder_val;
       b_queue_send(&queue_HMI_input, &tx_msg);
     }
     break;
@@ -66,21 +66,21 @@ bool b_check_current_encoder(void)
     if(port_pin_get_input_level(ENC2B))
     {
       /* Anti Clockwise */
-      if(CURRENT_MIN < ess_current_encoder_val)
+      if(CURRENT_MIN < eus_current_encoder_val)
       {
-        ess_current_encoder_val -= CURRENT_STEP;
-        if(CURRENT_MIN > ess_current_encoder_val)
-          ess_current_encoder_val = CURRENT_MIN;
+        eus_current_encoder_val -= CURRENT_STEP;
+        if(CURRENT_MIN > eus_current_encoder_val)
+          eus_current_encoder_val = CURRENT_MIN;
       }
     }
     else
     {
       /* Clockwise */
-      if(CURRENT_MAX > ess_current_encoder_val)
+      if(CURRENT_MAX > eus_current_encoder_val)
       {
-        ess_current_encoder_val += CURRENT_STEP;
-        if(CURRENT_MAX < ess_current_encoder_val)
-          ess_current_encoder_val = CURRENT_MAX;
+        eus_current_encoder_val += CURRENT_STEP;
+        if(CURRENT_MAX < eus_current_encoder_val)
+          eus_current_encoder_val = CURRENT_MAX;
       }
     }
     while(!port_pin_get_input_level(ENC2A)) { ; }
@@ -97,21 +97,21 @@ bool b_check_voltage_encoder(void)
     if(port_pin_get_input_level(ENC1B))
     {
       /* Anti Clockwise */
-      if(VOLTAGE_MIN < ess_voltage_encoder_val)
+      if(VOLTAGE_MIN < eus_voltage_encoder_val)
       {
-        ess_voltage_encoder_val -= VOLTAGE_STEP;
-        if(ess_voltage_encoder_val < VOLTAGE_MIN)
-          ess_voltage_encoder_val = VOLTAGE_MIN;
+        eus_voltage_encoder_val -= VOLTAGE_STEP;
+        if(eus_voltage_encoder_val < VOLTAGE_MIN)
+          eus_voltage_encoder_val = VOLTAGE_MIN;
       }
     }
     else
     {
       /* Clockwise */
-      if(VOLTAGE_MAX > ess_voltage_encoder_val)
+      if(VOLTAGE_MAX > eus_voltage_encoder_val)
       {
-        ess_voltage_encoder_val += VOLTAGE_STEP;
-        if(VOLTAGE_MAX < ess_voltage_encoder_val)
-          ess_voltage_encoder_val = VOLTAGE_MAX;
+        eus_voltage_encoder_val += VOLTAGE_STEP;
+        if(VOLTAGE_MAX < eus_voltage_encoder_val)
+          eus_voltage_encoder_val = VOLTAGE_MAX;
       }
     }
     while(!port_pin_get_input_level(ENC1A)) { ; }

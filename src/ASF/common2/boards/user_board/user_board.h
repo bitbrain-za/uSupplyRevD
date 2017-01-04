@@ -37,6 +37,10 @@ GPIO
 #define I2C_SDA_PINMUX            PINMUX_PA16C_SERCOM1_PAD0
 #define I2C_SCL_PINMUX            PINMUX_PA17C_SERCOM1_PAD1
 
+#define CLIM_PIN                  PIN_PA27
+#define CLIM_ENABLE()             port_pin_set_output_level(CLIM_PIN, false)
+#define CLIM_DISABLE()            port_pin_set_output_level(CLIM_PIN, true)
+
 /*
 LCD
 */

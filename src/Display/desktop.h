@@ -20,7 +20,7 @@ typedef enum
 typedef struct  
 {
   DESKTOP_CMD command;
-  U8 param[0xFF];
+  U8 param[32];
 }DESKTOP_MESSAGE;
 
 Queue queue_desktop_command;

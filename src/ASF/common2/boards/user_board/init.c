@@ -42,6 +42,9 @@ static void gpio_init(void)
   port_pin_set_config(EEWP_PIN, &pin_conf);
   port_pin_set_output_level(EEWP_PIN, EEWP_ACTIVE);
 
+  port_pin_set_config(CLIM_PIN, &pin_conf);
+  CLIM_ENABLE();
+
   EEWP_ENABLE();
 }
 

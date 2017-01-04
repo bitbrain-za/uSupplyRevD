@@ -24,11 +24,11 @@ typedef enum
 typedef struct  
 {
   HMI_INPUT source;
-  S16       value;
+  U16       value;
 }HMI_MESSAGE;
 
-S16 ess_voltage_encoder_val;
-S16 ess_current_encoder_val;
+U16 eus_voltage_encoder_val;
+U16 eus_current_encoder_val;
 
 Queue queue_HMI_input;
 

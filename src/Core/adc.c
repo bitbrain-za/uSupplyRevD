@@ -35,22 +35,27 @@ void ADC_FSM(void)
 {
   static ADC_STATES state = ADC_INIT;
   static TIMER_HANDLE adc_timer;
+  SYS_MESSAGE msg;
 
   switch(state)
   {
     case ADC_INIT:
-    adc_timer = timer_new(1000);
+    adc_timer = timer_new(400);
     adc_initialise();
     state = ADC_READ_VOLTAGE;
     break;
 
     case ADC_READ_VOLTAGE:
-    eus_raw_voltage_reading = ReadVoltage();
+    msg.source = SRC_ADC;
+    msg.value = ReadVoltage();
+    b_queue_send(&queue_voltage_control, &msg);
     state = ADC_READ_CURRENT;
     break;
 
     case ADC_READ_CURRENT:
-    eus_raw_current_reading = ReadCurrent();
+    msg.source = SRC_ADC;
+    msg.value = ReadCurrent();
+    b_queue_send(&queue_current_control, &msg);    
     state = ADC_READ_TEMPERATURE;
     break;
 
@@ -73,8 +78,9 @@ void adc_initialise(void)
   struct adc_config config_adc;
 
   adc_get_config_defaults(&config_adc);
+  config_adc.reference = ADC_REFERENCE_INTVCC0;
   config_adc.negative_input = ADC_NEGATIVE_INPUT_GND;
-  config_adc.positive_input = ADC_POSITIVE_INPUT_PIN19;
+  config_adc.positive_input = ADC_VOLTAGE_SENSE;
   adc_init(&adc_instance, ADC, &config_adc);
   adc_enable(&adc_instance);
 }

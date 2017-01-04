@@ -20,6 +20,8 @@
 typedef enum
 {
   DISP_DESKTOP,
+  DISP_VOLTAGE_SET,
+  DISP_CURRENT_SET,
   DISP_MENU,
 }DESKTOP_STATE;
 
@@ -39,8 +41,12 @@ typedef enum
                                /____/_/
 */
 
-void DisplayDesktop();
+void ClearVoltageArea(bool invert);
+void ClearSecondArea(bool invert);
+void desktop_ClearMenuBar(bool invert);
+void DisplayDesktop(void);
 void v_display_voltage(U16 voltage);
+void v_display_current(U16 milliamps);
 void v_draw_grid(void);
 void v_draw_menu_bar(void);
 /*
@@ -60,7 +66,7 @@ void desktop_FSM(bool reset)
   static DESKTOP_STATE state = DISP_DESKTOP;
   DESKTOP_CMD cmd;
   DESKTOP_MESSAGE message;
-
+  static TIMER_HANDLE timer_disp;
   U16 us_temp;
 
   if(reset)
@@ -71,6 +77,7 @@ void desktop_FSM(bool reset)
     b_queue_init(&queue_desktop_command, sizeof(DESKTOP_MESSAGE), 1);
     v_draw_grid();
     v_draw_menu_bar();
+    timer_disp = timer_new(1000);
   }
 
   while(b_queue_read(&queue_HMI_input, &hmi_msg))
@@ -78,15 +85,25 @@ void desktop_FSM(bool reset)
     switch(hmi_msg.source)
     {
       case HMI_ENC_V:
-         sprintf(str, "%d.%02d V", hmi_msg.value/1000, (hmi_msg.value%1000) / 10);
-         GoToXY(0, 0);
-         PutStr(str, false, JUST_CENTER);
+        timer_restart(timer_disp, 1000);
+        state = DISP_VOLTAGE_SET;
+        v_display_voltage(hmi_msg.value);
+        /*
+        sprintf(str, "%d.%02d V", hmi_msg.value/1000, (hmi_msg.value%1000) / 10);
+        GoToXY(0, 0);
+        PutStr(str, false, JUST_CENTER);
+        */
       break;
 
       case HMI_ENC_C:
+        timer_restart(timer_disp, 1000);
+        state = DISP_CURRENT_SET;
+        v_display_current(hmi_msg.value);
+        /*
          sprintf(str, "%d.%02d A", hmi_msg.value/1000, (hmi_msg.value%1000) / 10);
          GoToXY(0, 4);
          PutStr(str, false, JUST_CENTER);
+         */
       break;
 
       default:
@@ -117,8 +134,21 @@ void desktop_FSM(bool reset)
   switch(state)
   {
     case DISP_DESKTOP:
-      DisplayDesktop();
-      break;
+      if(timer_expired(timer_disp))
+      {
+        DisplayDesktop();
+        timer_reset(timer_disp);
+      }
+    break;
+
+    case DISP_CURRENT_SET:
+    case DISP_VOLTAGE_SET:
+    if(timer_expired(timer_disp))
+    {
+      state = DISP_DESKTOP;
+      timer_restart(timer_disp, 500);
+    }
+    break;
   }
 }
 
@@ -150,15 +180,27 @@ void desktop_ClearMenuBar(bool invert)
   ClearLine(7, invert);
 }
 
-void v_display_voltage(U16 voltage)
+void v_display_voltage(U16 millivolts)
 {
   char str[32];
 
   SetFont(FONT_MEDIUM);
   
   ClearVoltageArea(false);
-  sprintf(str, "%d.%02d V", voltage/1000, (voltage%1000) / 10);
+  sprintf(str, "%d.%02d V", millivolts/1000, (millivolts%1000) / 10);
   GoToXY(0, 0);
+  PutStr(str, false, JUST_CENTER);
+}
+
+void v_display_current(U16 milliamps)
+{
+  char str[32];
+
+  SetFont(FONT_MEDIUM);
+  
+  ClearSecondArea(false);
+  sprintf(str, "%d.%03d A", milliamps/1000, (milliamps%1000));
+  GoToXY(0, 4);
   PutStr(str, false, JUST_CENTER);
 }
 
@@ -199,12 +241,13 @@ void v_draw_menu_bar(void)
   v_display_draw_button(96, 55, 32, 9, "Zero", false);
 }
 
-void DisplayDesktop()
+void DisplayDesktop(void)
 {
   char str[32];
 
   SetFont(FONT_MEDIUM);
 
+  v_display_voltage(eus_output_voltage);
  
   /*
   Function Area
@@ -213,9 +256,6 @@ void DisplayDesktop()
   if(CurrentLimit::Dirty())
   {
     ClearSecondArea(false);
-    sprintf(str, "%d.%03d A", config.ram_current/1000, (config.ram_current%1000));
-    GoToXY(0, 4);
-    PutStr(str, false, JUST_CENTER);
     current_changed = false;
   }
   */

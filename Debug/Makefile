@@ -113,11 +113,14 @@ SUBDIRS :=  \
 ../src/Display \
 ../src/Display/fonts \
 ../src/Console \
+../src/Application \
 ../src/Peripherals
 
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS +=  \
+../src/Application/current_control.c \
+../src/Application/voltage_control.c \
 ../src/ASF/common/services/sleepmgr/samd/sleepmgr.c \
 ../src/ASF/sam0/drivers/adc/adc_sam_d_r/adc.c \
 ../src/ASF/sam0/drivers/adc/adc_sam_d_r/adc_callback.c \
@@ -172,6 +175,8 @@ ASM_SRCS +=
 
 
 OBJS +=  \
+src/Application/current_control.o \
+src/Application/voltage_control.o \
 src/ASF/common/services/sleepmgr/samd/sleepmgr.o \
 src/ASF/sam0/drivers/adc/adc_sam_d_r/adc.o \
 src/ASF/sam0/drivers/adc/adc_sam_d_r/adc_callback.o \
@@ -219,6 +224,8 @@ src/ASF/sam0/utils/syscalls/gcc/syscalls.o \
 src/main.o
 
 OBJS_AS_ARGS +=  \
+src/Application/current_control.o \
+src/Application/voltage_control.o \
 src/ASF/common/services/sleepmgr/samd/sleepmgr.o \
 src/ASF/sam0/drivers/adc/adc_sam_d_r/adc.o \
 src/ASF/sam0/drivers/adc/adc_sam_d_r/adc_callback.o \
@@ -266,6 +273,8 @@ src/ASF/sam0/utils/syscalls/gcc/syscalls.o \
 src/main.o
 
 C_DEPS +=  \
+src/Application/current_control.d \
+src/Application/voltage_control.d \
 src/ASF/common/services/sleepmgr/samd/sleepmgr.d \
 src/ASF/sam0/drivers/adc/adc_sam_d_r/adc.d \
 src/ASF/sam0/drivers/adc/adc_sam_d_r/adc_callback.d \
@@ -313,6 +322,8 @@ src/ASF/sam0/utils/syscalls/gcc/syscalls.d \
 src/main.d
 
 C_DEPS_AS_ARGS +=  \
+src/Application/current_control.d \
+src/Application/voltage_control.d \
 src/ASF/common/services/sleepmgr/samd/sleepmgr.d \
 src/ASF/sam0/drivers/adc/adc_sam_d_r/adc.d \
 src/ASF/sam0/drivers/adc/adc_sam_d_r/adc_callback.d \
@@ -464,6 +475,17 @@ LINKER_SCRIPT_DEP+=  \
 
 
 
+
+
+
+
+
+src/Application/%.o: ../src/Application/%.c
+	@echo Building file: $<
+	@echo Invoking: ARM/GNU C Compiler : 5.3.1
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\arm\arm-gnu-toolchain\bin\arm-none-eabi-gcc.exe$(QUOTE)  -x c -mthumb -D__SAMD21G17A__ -DDEBUG -DBOARD=USER_BOARD -DARM_MATH_CM0PLUS=true -DUSB_DEVICE_LPM_SUPPORT -DUDD_ENABLE -DEXTINT_CALLBACK_MODE=true -DUSART_CALLBACK_MODE=true -DTC_ASYNC=true -DADC_CALLBACK_MODE=true -DI2C_MASTER_CALLBACK_MODE=false  -I"../src/ASF/common/boards" -I"../src/ASF/sam0/utils" -I"../src/ASF/sam0/utils/header_files" -I"../src/ASF/sam0/utils/preprocessor" -I"../src/ASF/thirdparty/CMSIS/Include" -I"../src/ASF/thirdparty/CMSIS/Lib/GCC" -I"../src/ASF/common/utils" -I"../src/ASF/sam0/utils/cmsis/samd21/include" -I"../src/ASF/sam0/utils/cmsis/samd21/source" -I"../src/ASF/sam0/drivers/system" -I"../src/ASF/sam0/drivers/system/clock/clock_samd21_r21_da" -I"../src/ASF/sam0/drivers/system/clock" -I"../src/ASF/sam0/drivers/system/interrupt" -I"../src/ASF/sam0/drivers/system/interrupt/system_interrupt_samd21" -I"../src/ASF/sam0/drivers/system/pinmux" -I"../src/ASF/sam0/drivers/system/power" -I"../src/ASF/sam0/drivers/system/power/power_sam_d_r" -I"../src/ASF/sam0/drivers/system/reset" -I"../src/ASF/sam0/drivers/system/reset/reset_sam_d_r" -I"../src/ASF/common2/boards/user_board" -I"../src" -I"../src/config" -I"../src/ASF/sam0/drivers/port" -I"../src/ASF/sam0/drivers/sercom" -I"../src/ASF/common/services/sleepmgr" -I"../src/ASF/common/services/usb" -I"../src/ASF/common/services/usb/class/cdc" -I"../src/ASF/common/services/usb/class/cdc/device" -I"../src/ASF/common/services/usb/udc" -I"../src/ASF/sam0/drivers/extint" -I"../src/ASF/sam0/drivers/extint/extint_sam_d_r" -I"../src/ASF/sam0/drivers/sercom/usart" -I"../src/ASF/sam0/drivers/usb" -I"../src/ASF/sam0/drivers/usb/usb_sam_d_r" -I"../src/ASF/sam0/drivers/usb/stack_interface" -I"../src/ASF/sam0/drivers/tc" -I"../src/ASF/sam0/drivers/tc/tc_sam_d_r" -I"../src/ASF/sam0/drivers/adc" -I"../src/ASF/sam0/drivers/adc/adc_sam_d_r" -I"../src/ASF/sam0/drivers/sercom/i2c" -I"../src/ASF/sam0/drivers/sercom/i2c/i2c_sam0"  -O1 -fdata-sections -ffunction-sections -mlong-calls -g3 -Wall -mcpu=cortex-m0plus -c -pipe -fno-strict-aliasing -Wall -Wstrict-prototypes -Wmissing-prototypes -Werror-implicit-function-declaration -Wpointer-arith -std=gnu99 -ffunction-sections -fdata-sections -Wchar-subscripts -Wcomment -Wformat=2 -Wimplicit-int -Wmain -Wparentheses -Wsequence-point -Wreturn-type -Wswitch -Wtrigraphs -Wunused -Wuninitialized -Wunknown-pragmas -Wfloat-equal -Wundef -Wshadow -Wbad-function-cast -Wwrite-strings -Wsign-compare -Waggregate-return  -Wmissing-declarations -Wformat -Wmissing-format-attribute -Wno-deprecated-declarations -Wpacked -Wredundant-decls -Wnested-externs -Wlong-long -Wunreachable-code -Wcast-align --param max-inline-insns-single=500 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
 
 src/ASF/common/services/sleepmgr/samd/%.o: ../src/ASF/common/services/sleepmgr/samd/%.c
 	@echo Building file: $<

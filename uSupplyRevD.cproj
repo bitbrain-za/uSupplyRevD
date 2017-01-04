@@ -737,9 +737,22 @@
     <Folder Include="src\Display" />
     <Folder Include="src\Display\fonts" />
     <Folder Include="src\Console" />
+    <Folder Include="src\Application" />
     <Folder Include="src\Peripherals" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Application\current_control.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Application\current_control.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Application\voltage_control.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\Application\voltage_control.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="src\ASF\common\services\sleepmgr\samd\sleepmgr.c">
       <SubType>compile</SubType>
     </Compile>
