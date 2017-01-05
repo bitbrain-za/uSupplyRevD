@@ -200,9 +200,9 @@ void v_disp_draw_line(U8 x_start, U8 y_start, U8 x_end, U8 y_end, bool invert)
   horizontal = (y_start == y_end);
 
   if(horizontal)
-    v_draw_line_horizontal(y_start, x_start, x_end - x_start, invert);
+    v_draw_line_horizontal(y_start, x_start, x_end - x_start + 1, invert);
   else if(vertical)
-    v_draw_line_vertical(x_start, y_start, y_end - y_start, invert);
+    v_draw_line_vertical(x_start, y_start, y_end - y_start + 1, invert);
   else
     return;
 }
@@ -210,7 +210,6 @@ void v_disp_draw_line(U8 x_start, U8 y_start, U8 x_end, U8 y_end, bool invert)
 void v_display_draw_button(U8 x, U8 y, U8 width, U8 height, const char *str, bool invert)
 {
   unsigned int i=0;
-
   U8 string_length = string_width(_font, (char *)str);
   pos_x = x + ((width - string_length) / 2);
   pos_y = (y + 4) / 8;
@@ -219,13 +218,12 @@ void v_display_draw_button(U8 x, U8 y, U8 width, U8 height, const char *str, boo
   {
     PutChar(str[i], invert);
     i++;
-  }while(str[i]!='\0'); 
+  }while(str[i]!='\0');
 
   v_draw_line_vertical(x, pos_y, height, invert);
   v_draw_line_vertical(x + width, pos_y, height, invert);
   v_draw_line_horizontal(y, x, width, invert);
   v_draw_line_horizontal(y + height, x, width, invert);
-
 }
 
 /*
@@ -239,7 +237,7 @@ void v_display_draw_button(U8 x, U8 y, U8 width, U8 height, const char *str, boo
 
 void v_draw_line_horizontal(U8 y, U8 x, U8 length, bool invert)
 {
-  if(y >= LCD_ROWS)
+  if(LCD_ROWS <= y)
     return;
 
   if((length + x) > LCD_COLUMNS)

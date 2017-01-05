@@ -32,6 +32,8 @@ typedef enum
   FUNC_TIMER,
 }FUNCTIONS;
 
+TIMER_HANDLE timer_disp;
+
 /*
     ____             __        __
    / __ \_________  / /_____  / /___  ______  ___  _____
@@ -61,23 +63,18 @@ void v_draw_menu_bar(void);
 
 void desktop_FSM(bool reset)
 {
-  char str[64];
   HMI_MESSAGE hmi_msg;
   static DESKTOP_STATE state = DISP_DESKTOP;
-  DESKTOP_CMD cmd;
-  DESKTOP_MESSAGE message;
-  static TIMER_HANDLE timer_disp;
-  U16 us_temp;
 
   if(reset)
   {
     display_init();
     ClearScreen(false);
     state = DISP_DESKTOP;
-    b_queue_init(&queue_desktop_command, sizeof(DESKTOP_MESSAGE), 1);
     v_draw_grid();
     v_draw_menu_bar();
     timer_disp = timer_new(1000);
+    return;
   }
 
   while(b_queue_read(&queue_HMI_input, &hmi_msg))
@@ -108,25 +105,6 @@ void desktop_FSM(bool reset)
 
       default:
         v_draw_menu_bar();        
-      break;
-    }
-  }
-
-  if(b_queue_read(&queue_desktop_command, &message))
-  {
-    switch(message.command)
-    {
-      case DSKTP_CMD_REFRESH:
-      switch(state)
-      {
-        case DISP_DESKTOP:
-        break; 
-      }
-      break;
-
-      case DSKTP_CMD_UPDATE_VOLTAGE:
-      memcpy(&us_temp, message.param, 2);
-      v_display_voltage(us_temp);
       break;
     }
   }
@@ -217,6 +195,9 @@ void v_draw_menu_bar(void)
   /* Btn 3 - C-Limit */
   /* Btn 4 - Zero */
 
+
+  SetFont(FONT_SMALL);
+
   if(eb_voltage_on)
     v_display_draw_button(0, 55, 32, 9, "On", false);
   else
@@ -243,8 +224,6 @@ void v_draw_menu_bar(void)
 
 void DisplayDesktop(void)
 {
-  char str[32];
-
   SetFont(FONT_MEDIUM);
 
   v_display_voltage(eus_output_voltage);

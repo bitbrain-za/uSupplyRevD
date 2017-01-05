@@ -14,8 +14,7 @@ typedef struct
 {
   U32 Period;
   U32 Count;
-  bool Running;
-  bool Expired;
+  U8 Flags;
 }TIMER;
 
 typedef TIMER* TIMER_HANDLE;
@@ -26,7 +25,9 @@ extern void timer_delete(TIMER_HANDLE x_timer);
 
 extern void timer_stop(TIMER_HANDLE x_timer);
 extern void timer_start(TIMER_HANDLE x_timer);
-static inline bool timer_expired(TIMER_HANDLE x_timer) { return x_timer->Expired; }
+
+extern bool timer_expired(TIMER_HANDLE x_timer);
+extern bool timer_running(TIMER_HANDLE x_timer);
 
 extern void timer_reset(TIMER_HANDLE x_timer);
 extern void timer_restart(TIMER_HANDLE x_timer, U32 period);

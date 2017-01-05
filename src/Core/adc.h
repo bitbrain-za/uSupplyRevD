@@ -13,13 +13,13 @@
   #define extern
 #endif
 
-extern U16 eus_raw_temperature_reading;
+extern U16 eus_temperature;
 
 #ifdef ADC_C_
   #undef extern
 #endif
 
-extern void ADC_FSM(void);
+extern void ADC_FSM(bool reset);
 
 
 

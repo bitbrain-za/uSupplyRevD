@@ -17,11 +17,15 @@ typedef struct
 
 CONSOLE_COMMAND_RESULTS echo(char* param);
 CONSOLE_COMMAND_RESULTS help(char* cmd);
+CONSOLE_COMMAND_RESULTS voltage(char* param);
+CONSOLE_COMMAND_RESULTS temperature(char* param);
 
 console_command table[] = 
 {
   {"help", "Displays whole table", &help},
-  {"echo", "Echoes the input text", &echo}
+  {"echo", "Echoes the input text", &echo},
+  {"volt", "Prints the output voltage", &voltage},
+  {"temp", "Prints the temperature in degrees C", &temperature}
 };
 
 ERROR_LEVEL debug_level;
@@ -57,8 +61,6 @@ void printff(const char *format, ...)
 
   vsprintf(buffer, format, argptr);
   va_end(argptr);
-
-  //comport.printff(buffer);
 
   while('\0' != *ptr_str)
   {
@@ -330,5 +332,17 @@ CONSOLE_COMMAND_RESULTS echo(char* param)
   else
     printff("%s\n", param);
 
+  return CONS_EXECUTED;
+}
+
+CONSOLE_COMMAND_RESULTS voltage(char* param)
+{
+  printff("Voltage: %i\n", eus_output_voltage);
+  return CONS_EXECUTED;
+}
+
+CONSOLE_COMMAND_RESULTS temperature(char* param)
+{
+  printff("Temperature: %i\n", eus_temperature);
   return CONS_EXECUTED;
 }

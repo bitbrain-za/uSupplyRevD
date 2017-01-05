@@ -50,7 +50,6 @@ void v_voltage_control_FSM(bool reset)
 {
   SYS_MESSAGE message;
   static U16 set_voltage;
-  static U16 read_voltage;
 
   if(reset)
   {
@@ -95,5 +94,5 @@ void v_set_voltage(U16 voltage)
 
 U16 us_interpret_adc_value(U16 raw_value)
 {
-
+  return 0x0000;
 }

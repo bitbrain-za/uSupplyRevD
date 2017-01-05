@@ -20,24 +20,23 @@ int main (void)
   timer_module_init();
 
   TIMER_HANDLE test = timer_new(100);
-  desktop_FSM(true);
-
-  console_fsm(true);
 
   dac_SetReference(VREF_VREFPIN, 2048);
   dac_SetVoltage(10000);
-//  adc_initialise();
 
   udc_start();
 
+  ADC_FSM(true);
   HMI_FSM(true);
+  desktop_FSM(true);
+  console_fsm(true);
 
 	system_interrupt_enable_global();
   timer_start(test);
 
   while(1)
   {
-    ADC_FSM();
+    ADC_FSM(false);
     console_fsm(false);
     HMI_FSM(false);
     desktop_FSM(false);

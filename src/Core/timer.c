@@ -8,6 +8,9 @@
 
 #define MAX_TIMERS 32
 
+#define RUNNING_BM 0x01
+#define EXPIRED_BM 0x02
+
 struct tc_module tc_instance_system;
 
 #define TIMER_INT_ENABLE()      tc_enable_callback(&tc_instance_system, TC_CALLBACK_OVERFLOW);
@@ -57,9 +60,8 @@ TIMER_HANDLE timer_new(U32 period)
   }
 
   x_new_timer->Count = 0;
-  x_new_timer->Expired = false;
   x_new_timer->Period = period;
-  x_new_timer->Running = false;
+  x_new_timer->Flags = 0x00;
 
   for( i = 0 ; i < MAX_TIMERS ; i++ )
   {
@@ -93,7 +95,6 @@ void timer_delete(TIMER_HANDLE x_timer)
       return;
     }
   }
-  free(x_timer);
 }
 
 U32 timer_time_remaining(TIMER_HANDLE x_timer)
@@ -103,18 +104,18 @@ U32 timer_time_remaining(TIMER_HANDLE x_timer)
 
 void timer_stop(TIMER_HANDLE x_timer)
 {
-  x_timer->Running = false;
+  x_timer->Flags &= ~RUNNING_BM;
 }
 
 void timer_start(TIMER_HANDLE x_timer)
 {
-  x_timer->Running = true;
+  x_timer->Flags |= RUNNING_BM;
 }
 
 void timer_reset(TIMER_HANDLE x_timer)
 {
   x_timer->Count = 0;
-  x_timer->Expired = false;
+  x_timer->Flags = RUNNING_BM;
 }
 
 void timer_restart(TIMER_HANDLE x_timer, U32 period)
@@ -124,6 +125,9 @@ void timer_restart(TIMER_HANDLE x_timer, U32 period)
 }
 
 
+bool timer_expired(TIMER_HANDLE x_timer) { return (EXPIRED_BM == (x_timer->Flags & EXPIRED_BM)); }
+bool timer_running(TIMER_HANDLE x_timer) { return (RUNNING_BM == (x_timer->Flags & RUNNING_BM)); }
+
 void timer_tick(U32 ul_ms)
 {
   U32 i;
@@ -132,7 +136,7 @@ void timer_tick(U32 ul_ms)
   {
     if( NULL != gx_timer_list[i] )
     {
-      if( (gx_timer_list[i]->Running) && (!gx_timer_list[i]->Expired) )
+      if( timer_running(gx_timer_list[i]) && !timer_expired(gx_timer_list[i]) )
       {
         if(timer_time_remaining(gx_timer_list[i]) > ul_ms)
         {
@@ -140,7 +144,7 @@ void timer_tick(U32 ul_ms)
         }
         else
         {
-          gx_timer_list[i]->Expired = true;
+          gx_timer_list[i]->Flags |= EXPIRED_BM;
           gx_timer_list[i]->Count = gx_timer_list[i]->Period;
         }
       }
