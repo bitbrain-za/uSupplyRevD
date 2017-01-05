@@ -30,6 +30,8 @@ int main (void)
   HMI_FSM(true);
   desktop_FSM(true);
   console_fsm(true);
+  v_voltage_control_FSM(true);
+  v_current_FSM(true);
 
 	system_interrupt_enable_global();
   timer_start(test);
@@ -37,6 +39,8 @@ int main (void)
   while(1)
   {
     ADC_FSM(false);
+    v_voltage_control_FSM(false);
+    v_current_FSM(false);
     console_fsm(false);
     HMI_FSM(false);
     desktop_FSM(false);

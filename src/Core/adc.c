@@ -85,6 +85,7 @@ void adc_initialise(void)
   config_adc.clock_source = GCLK_GENERATOR_3;
   config_adc.negative_input = ADC_NEGATIVE_INPUT_GND;
   config_adc.positive_input = ADC_TEMPERATURE_SENSE;
+  config_adc.reference_compensation_enable = true;
   adc_init(&adc_instance, ADC, &config_adc);
   adc_enable(&adc_instance);
 }

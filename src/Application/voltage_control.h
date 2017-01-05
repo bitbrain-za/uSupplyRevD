@@ -9,23 +9,11 @@
 #ifndef VOLTAGE_CONTROL_H_
 #define VOLTAGE_CONTROL_H_
 
-typedef enum
-{
-  VC_HMI,
-  VC_ADC,
-  VC_SYS,
-}VOLTAGE_CONTROL_MESSAGE_SOURCE;
-
-typedef struct
-{
-  VOLTAGE_CONTROL_MESSAGE_SOURCE source;
-  U16 value;
-}VOLTAGE_CONTROL_MESSAGE;
-
 #ifdef VOLTAGE_CONTROL_C_
   #define extern
 #endif
 
+extern U16 eus_ram_voltage_setting;
 extern Queue queue_voltage_control;
 extern U16 eus_output_voltage;
 

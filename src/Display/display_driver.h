@@ -49,8 +49,11 @@ typedef enum
 #define LCD_WRPinSet()        port_pin_set_output_level(LCD_WR_PIN, true)
 #define LCD_WRPinClear()      port_pin_set_output_level(LCD_WR_PIN, false)
 
+extern U8 euc_dirty_mask;
+
 extern void disp_init(U8 *ram_buffer);
 extern void v_disp_paint(void);
+extern void v_disp_paint_page(U8 page);
 extern bool disp_SetStartLine(U8 line);
 extern bool disp_SetPageAddress(U8 page_address);
 extern bool disp_SetColumnAddress(U8 column_address);

@@ -60,10 +60,10 @@ void v_current_FSM(bool reset)
 
   if(b_queue_read(&queue_current_control, &message))
   {
-    eus_output_current = interpret_current(message.value);
+    eus_output_current_ua = interpret_current(message.value);
   }
 
-  if(IsCurrentLimitEnabled() && (eus_output_current >= eus_ram_current_setting))
+  if(IsCurrentLimitEnabled() && (eus_output_current_ua >= eus_ram_current_setting))
   {
     timer_reset(timer_current_limit_holdoff);
     CLIM_ENABLE();
@@ -102,8 +102,7 @@ U16 interpret_current(U16 raw_value)
   */
 
   U32 temp = raw_value * 1000;
-  /* Boundary -> 1 351 350 000 */
-  temp *= 330;
+  temp *= 330;  /* Boundary -> 1 351 350 000 */
   temp /= 148;
   temp /= 0xFFF;
 

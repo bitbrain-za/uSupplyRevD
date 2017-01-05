@@ -36,7 +36,6 @@ extern bool eb_fine;
 
 extern VOLTAGE_ADJ ex_voltage_adj;
 
-
 #ifdef CONFIG_C_
   #undef extern
 #endif

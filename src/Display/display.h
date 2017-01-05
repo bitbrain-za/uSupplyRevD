@@ -31,6 +31,7 @@ typedef enum
   JUST_NONE
 }JUSTIFICATION;
 
+extern void v_paint_pages(U8 page_mask);
 extern void display_init(void);
 extern void ClearScreen(bool invert);
 extern void ClearLine(U8 line, bool invert);

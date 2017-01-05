@@ -62,6 +62,7 @@ static U8 guca_display_frame_buffer[LCD_PAGES][LCD_COLUMNS];
 void display_init()
 {
   disp_init(&guca_display_frame_buffer[0][0]);
+  euc_dirty_mask = 0xFF;
 
   ClearScreen(false);
   SmallFont.charmap = small_font;
@@ -80,14 +81,25 @@ void ClearScreen(bool Invert)
 {
   U8 temp = Invert ? 0xFF : 0x00;
   memset(guca_display_frame_buffer, temp, LCD_COLUMNS * LCD_PAGES);
+  euc_dirty_mask = 0xFF;
   disp_Clear(Invert);
 }
 
 void ClearLine(U8 line, bool invert)
 {
+  U8 i;
+
   U8 temp = invert ? 0xFF : 0x00;
+
+  for(i = 0 ; i < LCD_COLUMNS ; i++)
+  {
+    if(guca_display_frame_buffer[line][i] != temp)
+    {
+      euc_dirty_mask |= (0x01 << line);
+      break;
+    }
+  }
   memset(&guca_display_frame_buffer[line][0], temp, LCD_COLUMNS);
-  disp_ClearLine(line, invert);
 }
 
 void GoToXY(U8 x, U8 y)
@@ -167,12 +179,16 @@ void PutChar(unsigned char c, bool invert)
       {
         data = ~data;
       }
-      guca_display_frame_buffer[y_index][pos_x + i] = data;
+
+      if(guca_display_frame_buffer[y_index][pos_x + i] != data)
+      {
+        euc_dirty_mask |= 0x01 << (y_index);
+        guca_display_frame_buffer[y_index][pos_x + i] = data;
+      }
     }
     y_index++;
   }
   pos_x += length;
-  v_disp_paint();
 }
  
 void SetFont(FONT_SIZE size)
@@ -220,10 +236,24 @@ void v_display_draw_button(U8 x, U8 y, U8 width, U8 height, const char *str, boo
     i++;
   }while(str[i]!='\0');
 
-  v_draw_line_vertical(x, pos_y, height, invert);
-  v_draw_line_vertical(x + width, pos_y, height, invert);
+  v_draw_line_vertical(x, y, height, invert);
+  v_draw_line_vertical(x + width, y, height, invert);
   v_draw_line_horizontal(y, x, width, invert);
   v_draw_line_horizontal(y + height, x, width, invert);
+}
+
+
+void v_paint_pages(U8 page_mask)
+{
+  U8 i;
+  for(i = 0 ; i < 8 ; i++)
+  {
+    if(0x01 == (page_mask & 0x01))
+    {
+      v_disp_paint_page(i);
+    }
+    page_mask = page_mask >> 1;
+  }
 }
 
 /*
@@ -259,6 +289,7 @@ void v_draw_line_horizontal(U8 y, U8 x, U8 length, bool invert)
       guca_display_frame_buffer[page][x + i] |= data;
     }
   }
+  euc_dirty_mask |= 1 << page;
 }
 
 void v_draw_line_vertical(U8 x, U8 y, U8 length, bool invert)
@@ -270,15 +301,15 @@ void v_draw_line_vertical(U8 x, U8 y, U8 length, bool invert)
     length = LCD_ROWS - 1 - x;
 
   U8 i = 0;
-  U8 offset = y % 8;
+  U8 page = y / 8;
+  U8 offset = ( (page + 1) * 8 ) - y;
   U8 pages = (length - offset) / 8;
   U8 data;
-  U8 page = y / 8;
 
   /* Top offset */
   if(offset > 0)
   {
-    data = 0x80;
+    data = 0x00;
     for( i = 0 ; i < offset ; i++ )
     {
       data = data >> 1;
@@ -293,6 +324,7 @@ void v_draw_line_vertical(U8 x, U8 y, U8 length, bool invert)
     {
       guca_display_frame_buffer[page][x] |= data;
     }
+    euc_dirty_mask |= (0x01 << page);
   }
 
   /* Full pages  */
@@ -308,6 +340,7 @@ void v_draw_line_vertical(U8 x, U8 y, U8 length, bool invert)
     {
       guca_display_frame_buffer[page][x] |= data;
     }   
+    euc_dirty_mask |= (0x01 << page);
   }
 
   /* Leftovers */
@@ -328,5 +361,6 @@ void v_draw_line_vertical(U8 x, U8 y, U8 length, bool invert)
     {
       guca_display_frame_buffer[page][x] |= data;
     }
+    euc_dirty_mask |= (0x01 << page);
   }
 }

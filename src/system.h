@@ -49,7 +49,5 @@ typedef struct
 
 extern struct i2c_master_module i2c_master_instance;
 
-extern U16 eus_ram_voltage_setting;
-extern U16 eus_ram_current_setting;
 
 #endif /* SYSTEM_H_ */

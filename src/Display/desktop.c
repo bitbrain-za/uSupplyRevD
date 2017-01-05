@@ -49,7 +49,6 @@ void desktop_ClearMenuBar(bool invert);
 void DisplayDesktop(void);
 void v_display_voltage(U16 voltage);
 void v_display_current(U16 milliamps);
-void v_draw_grid(void);
 void v_draw_menu_bar(void);
 /*
 
@@ -71,9 +70,9 @@ void desktop_FSM(bool reset)
     display_init();
     ClearScreen(false);
     state = DISP_DESKTOP;
-    v_draw_grid();
     v_draw_menu_bar();
-    timer_disp = timer_new(1000);
+    timer_disp = timer_new(500);
+    timer_reset(timer_disp);
     return;
   }
 
@@ -168,24 +167,20 @@ void v_display_voltage(U16 millivolts)
   sprintf(str, "%d.%02d V", millivolts/1000, (millivolts%1000) / 10);
   GoToXY(0, 0);
   PutStr(str, false, JUST_CENTER);
+  v_paint_pages(0x07);
 }
 
-void v_display_current(U16 milliamps)
+void v_display_current(U16 uamps)
 {
   char str[32];
 
   SetFont(FONT_MEDIUM);
   
   ClearSecondArea(false);
-  sprintf(str, "%d.%03d A", milliamps/1000, (milliamps%1000));
+  sprintf(str, "%d.%03d mA", uamps/1000, (uamps%1000));
   GoToXY(0, 4);
   PutStr(str, false, JUST_CENTER);
-}
-
-void v_draw_grid(void)
-{
-  v_disp_draw_line(0, 28, LCD_COLUMNS - 1, 28, false);
-  v_disp_draw_line(0, 55, LCD_COLUMNS - 1, 55, false);
+  v_paint_pages(0x38);
 }
 
 void v_draw_menu_bar(void)
@@ -227,6 +222,10 @@ void DisplayDesktop(void)
   SetFont(FONT_MEDIUM);
 
   v_display_voltage(eus_output_voltage);
+  v_disp_draw_line(0, 28, LCD_COLUMNS - 1, 28, false);
+  v_display_current(eus_output_current_ua);
+  v_draw_menu_bar();
+  v_paint_pages(0xC0);
  
   /*
   Function Area

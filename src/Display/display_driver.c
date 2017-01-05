@@ -17,7 +17,6 @@
                                /____/_/
 */
 
-void v_disp_paint_page(U8 page);
 void disp_SetPowerMode(bool VoltageFollower, bool VoltageRegulator, bool VoltageConverter);
 void disp_SendData(U8 val);
 void disp_SendCommand(U8 val);
@@ -36,6 +35,7 @@ void disp_trigger_write(void);
 
 static U8 *gucp_lcd_ram_buffer;
 static const U8 COLUMN_OFFSET = 0x00;
+U8 euc_dirty_mask = 0xFF;
 
 /*
     ______     __                        __   ______                 __  _
@@ -184,6 +184,14 @@ void disp_reset(void)
 
 void v_disp_paint_page(U8 page)
 {
+  U8 mask = euc_dirty_mask >> page;
+  if(0x01 != (mask & 0x01))
+  {
+    return;
+  }
+
+  euc_dirty_mask &= ~(0x01 << page);
+
   U8 column = 0;
   U8 *ptr_data = gucp_lcd_ram_buffer + (page * LCD_COLUMNS);
 
