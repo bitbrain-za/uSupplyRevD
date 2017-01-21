@@ -54,6 +54,7 @@ void v_current_FSM(bool reset)
   
   if(reset)
   {
+    INA219_init(BUSV_16V, ADC_BIT_10, SHUNT_AND_BUS_CONTINUOUS);
     b_queue_init(&queue_current_control, sizeof(SYS_MESSAGE), 1);
     timer_current_limit_holdoff = timer_new(1000);
   }  
@@ -100,10 +101,9 @@ U16 interpret_current(U16 raw_value)
   Iin (uA) = (ADC * 100*Vref/MAX) * 10000
  
   */
+  return Current();
 
-  U32 temp = raw_value * 1000;
-  temp *= 330;  /* Boundary -> 1 351 350 000 */
-  temp /= 148;
+  U32 temp = raw_value * 2230;
   temp /= 0xFFF;
 
   /* boundary -> 2230 */

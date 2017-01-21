@@ -89,10 +89,29 @@ void v_voltage_control_FSM(bool reset)
 
 void v_set_voltage(U16 voltage)
 {
-
+  dac_SetVoltage(voltage);
 }
 
 U16 us_interpret_adc_value(U16 raw_value)
 {
-  return 0x0000;
+  /* Voltage Divider:
+    R1 = 9K
+    R2 = 1K
+
+    Vsense = R2/(R1 + R2)Vin = 0.1Vout
+    Vout = 10 Vsense
+
+    ADC = Vsense*TOP/Vref 
+
+    Vsense = ADC * VREF / TOP
+      Vref = 3300 / 1.48
+      Top = 4095 
+
+  */
+ 
+  U64 temp = raw_value * 10;
+  temp *= 2230; /* mV */
+  temp /= 4095;
+
+  return (U16)(temp);
 }

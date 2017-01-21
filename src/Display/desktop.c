@@ -64,6 +64,7 @@ void desktop_FSM(bool reset)
 {
   HMI_MESSAGE hmi_msg;
   static DESKTOP_STATE state = DISP_DESKTOP;
+  SYS_MESSAGE msg;
 
   if(reset)
   {
@@ -84,6 +85,11 @@ void desktop_FSM(bool reset)
         timer_restart(timer_disp, 1000);
         state = DISP_VOLTAGE_SET;
         v_display_voltage(hmi_msg.value);
+
+        msg.source = SRC_HMI;
+        msg.value = hmi_msg.value;
+        b_queue_send(&queue_voltage_control, &msg);
+
         /*
         sprintf(str, "%d.%02d V", hmi_msg.value/1000, (hmi_msg.value%1000) / 10);
         GoToXY(0, 0);
@@ -177,7 +183,7 @@ void v_display_current(U16 uamps)
   SetFont(FONT_MEDIUM);
   
   ClearSecondArea(false);
-  sprintf(str, "%d.%03d mA", uamps/1000, (uamps%1000));
+  sprintf(str, "%d.%03d", uamps/1000, (uamps%1000));
   GoToXY(0, 4);
   PutStr(str, false, JUST_CENTER);
   v_paint_pages(0x38);

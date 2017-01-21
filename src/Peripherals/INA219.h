@@ -76,6 +76,6 @@ OPERATING_MODE mode;
 
 extern void INA219_init(BUS_VOLTAGE brng, ADC_SETTING adc_setting, OPERATING_MODE operating_mode);
 extern bool Reset(void);
-extern S16 Current(void);
+extern U16 Current(void);
 
 #endif /* INA219_H_ */

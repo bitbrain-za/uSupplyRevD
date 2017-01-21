@@ -22,7 +22,7 @@ int main (void)
   TIMER_HANDLE test = timer_new(100);
 
   dac_SetReference(VREF_VREFPIN, 2048);
-  dac_SetVoltage(10000);
+  dac_SetVoltage(2500);
 
   udc_start();
 

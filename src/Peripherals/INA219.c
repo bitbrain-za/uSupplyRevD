@@ -28,7 +28,7 @@ void INA219_init(BUS_VOLTAGE brng, ADC_SETTING adc_setting, OPERATING_MODE opera
   bus_voltage = brng;
   adc = adc_setting;
   mode = operating_mode;
-  gain = PGA_GAIN_DIV8;
+  gain = PGA_GAIN_DIV1;
 
   Configure();
 }
@@ -38,9 +38,9 @@ bool Reset(void)
   return WriteRegister(INA219_CONFIG, 0x8000); 
 }
 
-S16 Current()
+U16 Current()
 {
-  S16 shunt_register = ReadRegister(INA219_SHUNT_VOLTAGE);
+  U16 shunt_register = ReadRegister(INA219_SHUNT_VOLTAGE);
   return shunt_register;
 }
 
@@ -50,6 +50,10 @@ Local Functions
 bool Configure()
 {
   U16 config = 0x00;
+
+  config = ReadRegister(INA219_CONFIG);
+
+  config = 0;
 
   config |= bus_voltage << 13;
   config |= gain << 11;
